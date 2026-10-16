@@ -1,0 +1,1758 @@
+{
+  "$defs": {
+    "AssignmentDocument": {
+      "additionalProperties": false,
+      "description": "Original assignment text and immutable provenance.",
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "format": {
+          "default": "markdown",
+          "enum": [
+            "markdown",
+            "text"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "original_text": {
+          "maxLength": 100000,
+          "minLength": 1,
+          "title": "Original Text",
+          "type": "string"
+        },
+        "provenance": {
+          "default": "user-supplied assignment",
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Provenance",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "original_text",
+        "sha256"
+      ],
+      "title": "AssignmentDocument",
+      "type": "object"
+    },
+    "AssignmentRequirement": {
+      "additionalProperties": false,
+      "description": "Atomic requirement grounded in an exact assignment quote.",
+      "properties": {
+        "ambiguity_state": {
+          "default": "clear",
+          "enum": [
+            "clear",
+            "ambiguous",
+            "conflicting"
+          ],
+          "title": "Ambiguity State",
+          "type": "string"
+        },
+        "assignment_id": {
+          "format": "uuid",
+          "title": "Assignment Id",
+          "type": "string"
+        },
+        "code": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "default": "functional",
+          "enum": [
+            "functional",
+            "quality",
+            "constraint",
+            "scoring"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "necessity": {
+          "default": "mandatory",
+          "enum": [
+            "mandatory",
+            "optional"
+          ],
+          "title": "Necessity",
+          "type": "string"
+        },
+        "points": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Points"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceSpan"
+        },
+        "source_quote": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Source Quote",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "assignment_id",
+        "code",
+        "text",
+        "source",
+        "source_quote"
+      ],
+      "title": "AssignmentRequirement",
+      "type": "object"
+    },
+    "CheckEvidence": {
+      "additionalProperties": false,
+      "description": "Exact diagnostic substring from a captured execution.",
+      "properties": {
+        "check_execution_id": {
+          "format": "uuid",
+          "title": "Check Execution Id",
+          "type": "string"
+        },
+        "diagnostic": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Diagnostic",
+          "type": "string"
+        },
+        "diagnostic_stream": {
+          "enum": [
+            "stdout",
+            "stderr"
+          ],
+          "title": "Diagnostic Stream",
+          "type": "string"
+        },
+        "end_offset": {
+          "exclusiveMinimum": 0,
+          "title": "End Offset",
+          "type": "integer"
+        },
+        "exit_code": {
+          "title": "Exit Code",
+          "type": "integer"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "check",
+          "default": "check",
+          "title": "Kind",
+          "type": "string"
+        },
+        "review_run_id": {
+          "format": "uuid",
+          "title": "Review Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "start_offset": {
+          "minimum": 0,
+          "title": "Start Offset",
+          "type": "integer"
+        },
+        "summary": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Summary",
+          "type": "string"
+        }
+      },
+      "required": [
+        "review_run_id",
+        "summary",
+        "check_execution_id",
+        "diagnostic_stream",
+        "start_offset",
+        "end_offset",
+        "diagnostic",
+        "exit_code"
+      ],
+      "title": "CheckEvidence",
+      "type": "object"
+    },
+    "CheckExecution": {
+      "additionalProperties": false,
+      "description": "Actual bounded tool result, including nonexecution reasons.",
+      "properties": {
+        "bounded_stderr": {
+          "default": "",
+          "maxLength": 16000,
+          "title": "Bounded Stderr",
+          "type": "string"
+        },
+        "bounded_stdout": {
+          "default": "",
+          "maxLength": 16000,
+          "title": "Bounded Stdout",
+          "type": "string"
+        },
+        "duration_ms": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Duration Ms",
+          "type": "integer"
+        },
+        "environment_digest": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Environment Digest",
+          "type": "string"
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exit Code"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "compile",
+            "tests",
+            "static",
+            "memory"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "maxLength": 12000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        },
+        "review_run_id": {
+          "format": "uuid",
+          "title": "Review Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CheckStatus"
+        },
+        "tool_name": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Tool Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "review_run_id",
+        "kind",
+        "status",
+        "tool_name",
+        "environment_digest"
+      ],
+      "title": "CheckExecution",
+      "type": "object"
+    },
+    "CheckStatus": {
+      "description": "Execution outcomes, including unavailable environments.",
+      "enum": [
+        "PASSED",
+        "FAILED",
+        "SKIPPED",
+        "UNAVAILABLE",
+        "TIMEOUT",
+        "ERROR"
+      ],
+      "title": "CheckStatus",
+      "type": "string"
+    },
+    "CriterionAssessment": {
+      "additionalProperties": false,
+      "description": "Evidence-linked decision for exactly one rubric criterion.",
+      "properties": {
+        "awarded_points": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Awarded Points"
+        },
+        "criterion_id": {
+          "format": "uuid",
+          "title": "Criterion Id",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "maxItems": 1000,
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "explanation": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Explanation",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "not_verifiable_reason": {
+          "anyOf": [
+            {
+              "maxLength": 12000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Not Verifiable Reason"
+        },
+        "recommendations": {
+          "default": "",
+          "maxLength": 12000,
+          "title": "Recommendations",
+          "type": "string"
+        },
+        "review_run_id": {
+          "format": "uuid",
+          "title": "Review Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CriterionStatus"
+        }
+      },
+      "required": [
+        "review_run_id",
+        "criterion_id",
+        "status",
+        "explanation"
+      ],
+      "title": "CriterionAssessment",
+      "type": "object"
+    },
+    "CriterionRequirementRef": {
+      "additionalProperties": false,
+      "description": "Many-to-many source binding for a criterion.",
+      "properties": {
+        "criterion_id": {
+          "format": "uuid",
+          "title": "Criterion Id",
+          "type": "string"
+        },
+        "requirement_id": {
+          "format": "uuid",
+          "title": "Requirement Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "criterion_id",
+        "requirement_id"
+      ],
+      "title": "CriterionRequirementRef",
+      "type": "object"
+    },
+    "CriterionRole": {
+      "description": "Core, bonus, or qualitative criterion purpose.",
+      "enum": [
+        "CORE",
+        "BONUS",
+        "ADVISORY"
+      ],
+      "title": "CriterionRole",
+      "type": "string"
+    },
+    "CriterionStatus": {
+      "description": "Assessment truth states.",
+      "enum": [
+        "PASS",
+        "PARTIAL",
+        "FAIL",
+        "NOT_VERIFIABLE"
+      ],
+      "title": "CriterionStatus",
+      "type": "string"
+    },
+    "GradingPolicy": {
+      "additionalProperties": false,
+      "description": "Analysis preferences independent of source-defined point weights.",
+      "properties": {
+        "check_code_quality": {
+          "default": true,
+          "title": "Check Code Quality",
+          "type": "boolean"
+        },
+        "check_correctness": {
+          "default": true,
+          "title": "Check Correctness",
+          "type": "boolean"
+        },
+        "check_memory_safety": {
+          "default": false,
+          "title": "Check Memory Safety",
+          "type": "boolean"
+        },
+        "check_requirements": {
+          "default": true,
+          "title": "Check Requirements",
+          "type": "boolean"
+        },
+        "code_style": {
+          "default": "none",
+          "enum": [
+            "none",
+            "google",
+            "llvm",
+            "custom"
+          ],
+          "title": "Code Style",
+          "type": "string"
+        },
+        "custom_style_rules": {
+          "anyOf": [
+            {
+              "maxLength": 12000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Custom Style Rules"
+        },
+        "feedback_detail": {
+          "default": "detailed",
+          "enum": [
+            "brief",
+            "detailed",
+            "educational"
+          ],
+          "title": "Feedback Detail",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "max_score": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Score"
+        },
+        "run_tests": {
+          "default": true,
+          "title": "Run Tests",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "strictness": {
+          "default": "balanced",
+          "enum": [
+            "lenient",
+            "balanced",
+            "strict"
+          ],
+          "title": "Strictness",
+          "type": "string"
+        },
+        "version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "title": "GradingPolicy",
+      "type": "object"
+    },
+    "GradingRubric": {
+      "additionalProperties": false,
+      "description": "Frozen source-derived allocation and explicit bonus/cap policy.",
+      "properties": {
+        "assignment_id": {
+          "format": "uuid",
+          "title": "Assignment Id",
+          "type": "string"
+        },
+        "bonus_policy": {
+          "default": "NONE",
+          "enum": [
+            "NONE",
+            "ADD"
+          ],
+          "title": "Bonus Policy",
+          "type": "string"
+        },
+        "grade_cap": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Grade Cap"
+        },
+        "grade_cap_requirement_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Grade Cap Requirement Id"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "maximum_base_points": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum Base Points"
+        },
+        "needs_clarification": {
+          "default": false,
+          "title": "Needs Clarification",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "scoring_mode": {
+          "$ref": "#/$defs/ScoringMode",
+          "default": "UNSCORED"
+        },
+        "status": {
+          "const": "FROZEN",
+          "default": "FROZEN",
+          "title": "Status",
+          "type": "string"
+        },
+        "version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "assignment_id"
+      ],
+      "title": "GradingRubric",
+      "type": "object"
+    },
+    "ObservationEvidence": {
+      "additionalProperties": false,
+      "description": "Manifest-observable fact, never an invented execution claim.",
+      "properties": {
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "observation",
+          "default": "observation",
+          "title": "Kind",
+          "type": "string"
+        },
+        "observation": {
+          "enum": [
+            "file_absent",
+            "file_present"
+          ],
+          "title": "Observation",
+          "type": "string"
+        },
+        "provenance_description": {
+          "const": "inspected archive manifest",
+          "default": "inspected archive manifest",
+          "title": "Provenance Description",
+          "type": "string"
+        },
+        "relative_path": {
+          "title": "Relative Path",
+          "type": "string"
+        },
+        "review_run_id": {
+          "format": "uuid",
+          "title": "Review Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "summary": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Summary",
+          "type": "string"
+        }
+      },
+      "required": [
+        "review_run_id",
+        "summary",
+        "observation",
+        "relative_path"
+      ],
+      "title": "ObservationEvidence",
+      "type": "object"
+    },
+    "PenaltyApplication": {
+      "additionalProperties": false,
+      "description": "One evidence-backed use of an authorized deduction rule.",
+      "properties": {
+        "applied_amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "decimal_places": 4,
+          "ge": 0,
+          "max_digits": 16,
+          "title": "Applied Amount"
+        },
+        "evidence_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "explanation": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Explanation",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "penalty_rule_id": {
+          "format": "uuid",
+          "title": "Penalty Rule Id",
+          "type": "string"
+        },
+        "review_run_id": {
+          "format": "uuid",
+          "title": "Review Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "review_run_id",
+        "penalty_rule_id",
+        "applied_amount",
+        "explanation",
+        "evidence_ids"
+      ],
+      "title": "PenaltyApplication",
+      "type": "object"
+    },
+    "PenaltyRule": {
+      "additionalProperties": false,
+      "description": "Explicitly sourced, once-per-run deduction rule.",
+      "properties": {
+        "amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "decimal_places": 4,
+          "ge": 0,
+          "max_digits": 16,
+          "title": "Amount"
+        },
+        "code": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "repeat_policy": {
+          "const": "ONCE",
+          "default": "ONCE",
+          "title": "Repeat Policy",
+          "type": "string"
+        },
+        "requirement_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "maxItems": 200,
+          "minItems": 1,
+          "title": "Requirement Ids",
+          "type": "array"
+        },
+        "rubric_id": {
+          "format": "uuid",
+          "title": "Rubric Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "trigger": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Trigger",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rubric_id",
+        "code",
+        "description",
+        "amount",
+        "trigger",
+        "requirement_ids"
+      ],
+      "title": "PenaltyRule",
+      "type": "object"
+    },
+    "ReviewBundle": {
+      "additionalProperties": false,
+      "description": "Canonical portable review containing collections and ID references.",
+      "properties": {
+        "assessments": {
+          "items": {
+            "$ref": "#/$defs/CriterionAssessment"
+          },
+          "maxItems": 200,
+          "title": "Assessments",
+          "type": "array"
+        },
+        "assignment": {
+          "$ref": "#/$defs/AssignmentDocument"
+        },
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/CheckExecution"
+          },
+          "maxItems": 20,
+          "title": "Checks",
+          "type": "array"
+        },
+        "criteria": {
+          "items": {
+            "$ref": "#/$defs/RubricCriterion"
+          },
+          "maxItems": 200,
+          "minItems": 1,
+          "title": "Criteria",
+          "type": "array"
+        },
+        "criterion_requirements": {
+          "items": {
+            "$ref": "#/$defs/CriterionRequirementRef"
+          },
+          "maxItems": 40000,
+          "title": "Criterion Requirements",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "check": "#/$defs/CheckEvidence",
+                "observation": "#/$defs/ObservationEvidence",
+                "source": "#/$defs/SourceFileEvidence"
+              },
+              "propertyName": "kind"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/SourceFileEvidence"
+              },
+              {
+                "$ref": "#/$defs/CheckEvidence"
+              },
+              {
+                "$ref": "#/$defs/ObservationEvidence"
+              }
+            ]
+          },
+          "maxItems": 1000,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/SubmissionFile"
+          },
+          "maxItems": 1000,
+          "title": "Files",
+          "type": "array"
+        },
+        "penalty_applications": {
+          "items": {
+            "$ref": "#/$defs/PenaltyApplication"
+          },
+          "maxItems": 50,
+          "title": "Penalty Applications",
+          "type": "array"
+        },
+        "penalty_rules": {
+          "items": {
+            "$ref": "#/$defs/PenaltyRule"
+          },
+          "maxItems": 50,
+          "title": "Penalty Rules",
+          "type": "array"
+        },
+        "policy": {
+          "$ref": "#/$defs/GradingPolicy"
+        },
+        "requirements": {
+          "items": {
+            "$ref": "#/$defs/AssignmentRequirement"
+          },
+          "maxItems": 200,
+          "minItems": 1,
+          "title": "Requirements",
+          "type": "array"
+        },
+        "rubric": {
+          "$ref": "#/$defs/GradingRubric"
+        },
+        "run": {
+          "$ref": "#/$defs/ReviewRun"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "submission": {
+          "$ref": "#/$defs/SubmissionArchive"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReviewSummary"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "trace_events": {
+          "items": {
+            "$ref": "#/$defs/TraceEvent"
+          },
+          "maxItems": 500,
+          "title": "Trace Events",
+          "type": "array"
+        }
+      },
+      "required": [
+        "requirements",
+        "rubric",
+        "criteria",
+        "criterion_requirements",
+        "assignment",
+        "policy",
+        "submission",
+        "run",
+        "assessments"
+      ],
+      "title": "ReviewBundle",
+      "type": "object"
+    },
+    "ReviewRun": {
+      "additionalProperties": false,
+      "description": "One immutable submission, rubric, and policy evaluation.",
+      "properties": {
+        "finished_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Finished At"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "policy_id": {
+          "format": "uuid",
+          "title": "Policy Id",
+          "type": "string"
+        },
+        "rubric_id": {
+          "format": "uuid",
+          "title": "Rubric Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/RunState",
+          "default": "CREATED"
+        },
+        "strategy": {
+          "$ref": "#/$defs/RunStrategy",
+          "default": "MULTI_AGENT"
+        },
+        "submission_id": {
+          "format": "uuid",
+          "title": "Submission Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "submission_id",
+        "rubric_id",
+        "policy_id"
+      ],
+      "title": "ReviewRun",
+      "type": "object"
+    },
+    "ReviewSummary": {
+      "additionalProperties": false,
+      "description": "Deterministically calculated recommendation and uncertainty bounds.",
+      "properties": {
+        "base_points": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base Points"
+        },
+        "bonus_points": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bonus Points"
+        },
+        "known_points": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Known Points"
+        },
+        "maximum_possible_score": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum Possible Score"
+        },
+        "minimum_possible_score": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum Possible Score"
+        },
+        "penalty_points": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Penalty Points"
+        },
+        "recommended_score": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recommended Score"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "unresolved_criterion_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Unresolved Criterion Ids",
+          "type": "array"
+        }
+      },
+      "title": "ReviewSummary",
+      "type": "object"
+    },
+    "RubricCriterion": {
+      "additionalProperties": false,
+      "description": "Independently assessable rubric item.",
+      "properties": {
+        "category": {
+          "enum": [
+            "correctness",
+            "requirements",
+            "quality",
+            "memory",
+            "tests"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "code": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "max_points": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 4,
+              "ge": 0,
+              "max_digits": 16
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Points"
+        },
+        "ordinal": {
+          "minimum": 1,
+          "title": "Ordinal",
+          "type": "integer"
+        },
+        "role": {
+          "$ref": "#/$defs/CriterionRole",
+          "default": "CORE"
+        },
+        "rubric_id": {
+          "format": "uuid",
+          "title": "Rubric Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "verification_method": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Verification Method",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rubric_id",
+        "code",
+        "ordinal",
+        "title",
+        "description",
+        "category",
+        "verification_method"
+      ],
+      "title": "RubricCriterion",
+      "type": "object"
+    },
+    "RunState": {
+      "description": "Review lifecycle states.",
+      "enum": [
+        "CREATED",
+        "RUNNING",
+        "COMPLETED",
+        "NEEDS_REVIEW",
+        "FAILED"
+      ],
+      "title": "RunState",
+      "type": "string"
+    },
+    "RunStrategy": {
+      "description": "Runtime agent strategy recorded for audit.",
+      "enum": [
+        "MULTI_AGENT",
+        "SINGLE_AGENT_BASELINE"
+      ],
+      "title": "RunStrategy",
+      "type": "string"
+    },
+    "ScoringMode": {
+      "description": "Authorized scoring modes.",
+      "enum": [
+        "UNSCORED",
+        "POINTS"
+      ],
+      "title": "ScoringMode",
+      "type": "string"
+    },
+    "SourceFileEvidence": {
+      "additionalProperties": false,
+      "description": "Exact inspected source excerpt supporting an assessment.",
+      "properties": {
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "source",
+          "default": "source",
+          "title": "Kind",
+          "type": "string"
+        },
+        "review_run_id": {
+          "format": "uuid",
+          "title": "Review Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/SourceSpan"
+        },
+        "submission_file_id": {
+          "format": "uuid",
+          "title": "Submission File Id",
+          "type": "string"
+        },
+        "summary": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Summary",
+          "type": "string"
+        },
+        "verified_excerpt": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Verified Excerpt",
+          "type": "string"
+        }
+      },
+      "required": [
+        "review_run_id",
+        "summary",
+        "submission_file_id",
+        "span",
+        "verified_excerpt"
+      ],
+      "title": "SourceFileEvidence",
+      "type": "object"
+    },
+    "SourceSpan": {
+      "additionalProperties": false,
+      "description": "Inclusive line span in an assignment or source file.",
+      "properties": {
+        "end_line": {
+          "minimum": 1,
+          "title": "End Line",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "start_line": {
+          "minimum": 1,
+          "title": "Start Line",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start_line",
+        "end_line"
+      ],
+      "title": "SourceSpan",
+      "type": "object"
+    },
+    "SubmissionArchive": {
+      "additionalProperties": false,
+      "description": "Immutable archive metadata without student identity.",
+      "properties": {
+        "archive_name": {
+          "maxLength": 12000,
+          "minLength": 1,
+          "title": "Archive Name",
+          "type": "string"
+        },
+        "byte_size": {
+          "minimum": 0,
+          "title": "Byte Size",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "archive_name",
+        "sha256",
+        "byte_size"
+      ],
+      "title": "SubmissionArchive",
+      "type": "object"
+    },
+    "SubmissionFile": {
+      "additionalProperties": false,
+      "description": "Canonical manifest entry in exactly one archive.",
+      "properties": {
+        "byte_size": {
+          "minimum": 0,
+          "title": "Byte Size",
+          "type": "integer"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "language": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Language"
+        },
+        "line_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line Count"
+        },
+        "relative_path": {
+          "title": "Relative Path",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "submission_id": {
+          "format": "uuid",
+          "title": "Submission Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "submission_id",
+        "relative_path",
+        "sha256",
+        "byte_size"
+      ],
+      "title": "SubmissionFile",
+      "type": "object"
+    },
+    "TraceEvent": {
+      "additionalProperties": false,
+      "description": "Bounded chronological audit event without secrets or full prompts.",
+      "properties": {
+        "agent_role": {
+          "enum": [
+            "analyst",
+            "grader",
+            "orchestrator",
+            "baseline"
+          ],
+          "title": "Agent Role",
+          "type": "string"
+        },
+        "detail": {
+          "maxLength": 4000,
+          "title": "Detail",
+          "type": "string"
+        },
+        "event_type": {
+          "enum": [
+            "agent_start",
+            "agent_result",
+            "mcp_call",
+            "mcp_result",
+            "handoff",
+            "error",
+            "decision"
+          ],
+          "title": "Event Type",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable entity identifier",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "review_run_id": {
+          "format": "uuid",
+          "title": "Review Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sequence": {
+          "minimum": 1,
+          "title": "Sequence",
+          "type": "integer"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        }
+      },
+      "required": [
+        "review_run_id",
+        "sequence",
+        "agent_role",
+        "event_type",
+        "detail"
+      ],
+      "title": "TraceEvent",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Validated complete review, with no caller-controlled output paths.",
+  "properties": {
+    "bundle": {
+      "$ref": "#/$defs/ReviewBundle"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "bundle"
+  ],
+  "title": "SaveReviewRequest",
+  "type": "object"
+}

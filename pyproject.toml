@@ -1,22 +1,25 @@
 [project]
 name = "ta-mcp"
 version = "0.1.0"
-description = "Add your description here"
+description = "Evidence-backed lab reviews through two agents and scoped MCP tools"
 readme = "README.md"
 authors = [
     { name = "Nikita Lenyk", email = "nikitalenyk2@gmail.com" }
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 dependencies = [
+    "alembic>=1.16,<2",
     "fastapi>=0.143.1",
     "fastmcp>=4.1.0",
     "mcp>=2.3.0",
     "openai-agents>=0.24.0",
     "pydantic>=2.14.1",
+    "pyyaml>=6,<7",
+    "sqlalchemy>=2.0,<3",
 ]
 
 [project.scripts]
-ta-mcp = "ta_mcp:main"
+ta-mcp = "ta_mcp.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.13.0,<0.14.0"]
@@ -29,5 +32,12 @@ dev = [
     "isort>=9.0.2",
     "mdformat>=1.0.0",
     "pre-commit>=4.7.0",
+    "pytest>=8,<10",
     "ty>=0.0.87",
 ]
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

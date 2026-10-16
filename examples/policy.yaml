@@ -1,0 +1,9 @@
+strictness: balanced
+code_style: none
+feedback_detail: detailed
+check_correctness: true
+check_memory_safety: false
+check_code_quality: true
+check_requirements: true
+run_tests: true
+max_score: null
