@@ -1,0 +1,36 @@
+{
+  "assignment": "mini_assignment.md",
+  "evaluation_method": "Compare each generated review against the known seeded defect. A correct review must identify the main issue, cite evidence, and not claim unobserved runtime checks.",
+  "gold": [
+    {
+      "submission": "submission_01.zip",
+      "expected": "PASS",
+      "known_issue": null,
+      "minimal_witness": "cmake succeeds; count_even -3 3 -> 3; count_even 2 6 -> 3; count_even xyz 4 exits 2"
+    },
+    {
+      "submission": "submission_02.zip",
+      "expected": "FAIL",
+      "known_issue": "Excludes the inclusive right endpoint (uses value < right).",
+      "minimal_witness": "count_even 2 6 -> 2, expected 3"
+    },
+    {
+      "submission": "submission_03.zip",
+      "expected": "FAIL",
+      "known_issue": "Ignores negative integers by starting the loop at 0 for left < 0.",
+      "minimal_witness": "count_even -6 -2 -> 0, expected 3"
+    },
+    {
+      "submission": "submission_04.zip",
+      "expected": "FAIL",
+      "known_issue": "Uses atoi without validating all characters or the allowed integer bounds.",
+      "minimal_witness": "count_even abc 4 -> 3 with exit 0, expected exit 2; count_even 1001 1001 exits 0, expected 2"
+    },
+    {
+      "submission": "submission_05.zip",
+      "expected": "FAIL",
+      "known_issue": "Compilation fails due to missing semicolon after cout output statement.",
+      "minimal_witness": "cmake --build build returns nonzero; do not assert any runtime result"
+    }
+  ]
+}

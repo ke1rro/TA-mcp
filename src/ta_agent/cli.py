@@ -29,7 +29,7 @@ async def get_submissions(
 
     if call_tool_result.is_error:
         raise AgentsException(
-            f"Error listing submissions for assignment {assignment_idx}: {call_tool_result.error_message}"
+            f"Error listing submissions for assignment {assignment_idx}"
         )
 
     result = []

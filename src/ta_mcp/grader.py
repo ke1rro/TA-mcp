@@ -111,7 +111,7 @@ def save_report_tool(submission_idx: str, report: str) -> str:
     Returns:
         A success message confirming the saved report location.
     """
-    
+
     save_report(submission_idx, report)
 
     return "Success: Report saved."
