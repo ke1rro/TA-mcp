@@ -4,10 +4,13 @@ from uuid import UUID
 from ta_mcp.domain import (
     AssignmentDocument,
     CheckEvidence,
+    CheckExecution,
     CheckStatus,
     CriterionRole,
     CriterionStatus,
     Entity,
+    Evidence,
+    GradingDecisions,
     ObservationEvidence,
     ReviewBundle,
     RubricAnalysis,
@@ -31,6 +34,56 @@ def require_unique(values: list[object], label: str) -> None:
     """Reject duplicated natural keys and association links."""
     if len(values) != len(set(values)):
         raise ValueError(f"Duplicate {label}")
+
+
+def resolve_check_evidence_offsets(
+    decisions: GradingDecisions, checks: list[CheckExecution]
+) -> tuple[GradingDecisions, int]:
+    """Derive citation offsets from unique exact matches in executed tool output.
+
+    Args:
+        decisions: Model decisions with unchanged diagnostic text and references.
+        checks: Actual tool receipts available to the grader.
+
+    Returns:
+        Decisions with resolved offsets and their correction count. Leave unknown,
+        ambiguous, or mismatched evidence for the existing strict validator.
+    """
+    indexed = {check.id: check for check in checks}
+    evidence: list[Evidence] = []
+    corrected = 0
+    for item in decisions.evidence:
+        if isinstance(item, CheckEvidence):
+            check = indexed.get(item.check_execution_id)
+            if (
+                check is not None
+                and check.status in {CheckStatus.PASSED, CheckStatus.FAILED}
+                and check.exit_code == item.exit_code
+            ):
+                output = (
+                    check.bounded_stdout
+                    if item.diagnostic_stream == "stdout"
+                    else check.bounded_stderr
+                )
+                start = output.find(item.diagnostic)
+                if (
+                    (
+                        item.end_offset > len(output)
+                        or output[item.start_offset : item.end_offset]
+                        != item.diagnostic
+                    )
+                    and start >= 0
+                    and output.find(item.diagnostic, start + 1) == -1
+                ):
+                    item = item.model_copy(
+                        update={
+                            "start_offset": start,
+                            "end_offset": start + len(item.diagnostic),
+                        }
+                    )
+                    corrected += 1
+        evidence.append(item)
+    return decisions.model_copy(update={"evidence": evidence}), corrected
 
 
 def validate_analysis(assignment: AssignmentDocument, analysis: RubricAnalysis) -> None:

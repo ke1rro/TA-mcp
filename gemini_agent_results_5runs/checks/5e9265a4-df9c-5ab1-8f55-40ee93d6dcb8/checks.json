@@ -1,0 +1,72 @@
+[
+  {
+    "bounded_stderr": "/demo/source/main.cpp:37:31: error: expected ';' after expression\n    std::cout << count << '\\n'\n                              ^\n                              ;\n1 error generated.\nmake[2]: *** [CMakeFiles/count_even.dir/main.cpp.o] Error 1\nmake[1]: *** [CMakeFiles/count_even.dir/all] Error 2\nmake: *** [all] Error 2\n",
+    "bounded_stdout": "[ 50%] Building CXX object CMakeFiles/count_even.dir/main.cpp.o\n",
+    "duration_ms": 243,
+    "environment_digest": "bbbffa722569f0cdd7bb63b6c80648a862fbfe100e2ba866c7beab89a4322e1a",
+    "exit_code": 2,
+    "id": "35f5b86c-00ce-5607-82bd-b691bd05f0dc",
+    "kind": "compile",
+    "reason": null,
+    "review_run_id": "5e9265a4-df9c-5ab1-8f55-40ee93d6dcb8",
+    "schema_version": "1.0",
+    "status": "FAILED",
+    "tool_name": "cmake.build"
+  },
+  {
+    "bounded_stderr": "",
+    "bounded_stdout": "-- Configuring done\n-- Generating done\n-- Build files have been written to: /demo/build\n",
+    "duration_ms": 1061,
+    "environment_digest": "bbbffa722569f0cdd7bb63b6c80648a862fbfe100e2ba866c7beab89a4322e1a",
+    "exit_code": 0,
+    "id": "b7997e69-8678-5e4a-89f3-1cc2601ba9c2",
+    "kind": "compile",
+    "reason": null,
+    "review_run_id": "5e9265a4-df9c-5ab1-8f55-40ee93d6dcb8",
+    "schema_version": "1.0",
+    "status": "PASSED",
+    "tool_name": "cmake.configure"
+  },
+  {
+    "bounded_stderr": "",
+    "bounded_stdout": "",
+    "duration_ms": 0,
+    "environment_digest": "bbbffa722569f0cdd7bb63b6c80648a862fbfe100e2ba866c7beab89a4322e1a",
+    "exit_code": null,
+    "id": "bf130382-b701-5b8a-bd1e-95782850adf0",
+    "kind": "tests",
+    "reason": "Runtime checks unavailable after the failed-build scenario.",
+    "review_run_id": "5e9265a4-df9c-5ab1-8f55-40ee93d6dcb8",
+    "schema_version": "1.0",
+    "status": "SKIPPED",
+    "tool_name": "ta-mcp.local.cli"
+  },
+  {
+    "bounded_stderr": "",
+    "bounded_stdout": "",
+    "duration_ms": 0,
+    "environment_digest": "bbbffa722569f0cdd7bb63b6c80648a862fbfe100e2ba866c7beab89a4322e1a",
+    "exit_code": null,
+    "id": "ecc869ff-9142-50ef-b419-347f21e2acb0",
+    "kind": "tests",
+    "reason": "Runtime checks unavailable after the failed-build scenario.",
+    "review_run_id": "5e9265a4-df9c-5ab1-8f55-40ee93d6dcb8",
+    "schema_version": "1.0",
+    "status": "SKIPPED",
+    "tool_name": "ta-mcp.local.output"
+  },
+  {
+    "bounded_stderr": "",
+    "bounded_stdout": "",
+    "duration_ms": 0,
+    "environment_digest": "bbbffa722569f0cdd7bb63b6c80648a862fbfe100e2ba866c7beab89a4322e1a",
+    "exit_code": null,
+    "id": "f455e0e7-c6b9-56fb-bcb5-5863a063a8e5",
+    "kind": "tests",
+    "reason": "Runtime checks unavailable after the failed-build scenario.",
+    "review_run_id": "5e9265a4-df9c-5ab1-8f55-40ee93d6dcb8",
+    "schema_version": "1.0",
+    "status": "SKIPPED",
+    "tool_name": "ta-mcp.local.correctness"
+  }
+]

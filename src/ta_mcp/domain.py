@@ -530,8 +530,31 @@ class ReviewBundle(RubricAnalysis):
 
 
 def source_has_points(quote: str, points: Decimal) -> bool:
-    """Recognize explicit point amounts without allocating weights."""
+    """Recognize inline amounts or a cited Markdown points column.
+
+    Args:
+        quote: Exact source excerpt including a table header when needed.
+        points: Explicit allocation to find in text or the final cited table row.
+
+    Returns:
+        Whether the source explicitly contains the requested allocation.
+    """
     amounts = re.findall(
         r"(?<![\d.])(\d+(?:[.,]\d+)?)\s*(?:points?\b|pts?\b|бал\w*)", quote, re.I
     )
-    return any(Decimal(amount.replace(",", ".")) == points for amount in amounts)
+    if any(Decimal(amount.replace(",", ".")) == points for amount in amounts):
+        return True
+    rows = [
+        [cell.strip().strip("`*") for cell in line.strip().strip("|").split("|")]
+        for line in quote.splitlines()
+        if line.strip().startswith("|")
+    ]
+    if len(rows) < 3:
+        return False
+    return any(
+        re.fullmatch(r"бали?|балів|points?|pts?", label, re.I)
+        and index < len(rows[-1])
+        and re.fullmatch(r"\d+(?:[.,]\d+)?", rows[-1][index])
+        and Decimal(rows[-1][index].replace(",", ".")) == points
+        for index, label in enumerate(rows[0])
+    )

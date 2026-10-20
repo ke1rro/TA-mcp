@@ -2,7 +2,7 @@ import hashlib
 import json
 from html import escape
 
-from ta_mcp.domain import ReviewBundle
+from ta_mcp.domain import ReviewBundle, RubricAnalysis
 from ta_mcp.scoring import ScoreCalculator
 
 
@@ -24,6 +24,82 @@ def content_digest(content: str) -> str:
 def markdown_cell(text: object) -> str:
     """Escape untrusted content for a Markdown table cell."""
     return escape(str(text)).replace("|", "\\|").replace("\n", " ")
+
+
+def render_analysis_markdown(analysis: RubricAnalysis) -> str:
+    """Render the validated analyst requirements and rubric for inspection.
+
+    List criteria first, then requirements with their source quotes and criterion
+    links. Include explicit penalty rules when the assignment provides them.
+
+    Args:
+        analysis: Exact structured handoff supplied to the Submission Grader.
+
+    Returns:
+        Readable Markdown containing criteria, allocations, requirements and quotes.
+    """
+    criteria = {item.id: item.code for item in analysis.criteria}
+    lines = [
+        "# Analyst requirements and rubric",
+        "",
+        f"Rubric: `{analysis.rubric.id}`",
+        f"Scoring mode: {analysis.rubric.scoring_mode}",
+        f"Maximum base points: {analysis.rubric.maximum_base_points}",
+        f"Needs clarification: {analysis.rubric.needs_clarification}",
+        "",
+        "## Criteria for the Grader",
+        "",
+        "| Code | Criterion | Points | Verification method |",
+        "| --- | --- | --- | --- |",
+    ]
+    for criterion in analysis.criteria:
+        lines.append(
+            "| "
+            + " | ".join(
+                markdown_cell(value)
+                for value in (
+                    criterion.code,
+                    criterion.title,
+                    (
+                        criterion.max_points
+                        if criterion.max_points is not None
+                        else "unscored"
+                    ),
+                    criterion.verification_method,
+                )
+            )
+            + " |"
+        )
+    lines += ["", "## Requirements and sources", ""]
+    for requirement in analysis.requirements:
+        linked = ", ".join(
+            criteria[link.criterion_id]
+            for link in analysis.criterion_requirements
+            if link.requirement_id == requirement.id
+        )
+        lines += [
+            f"### {markdown_cell(requirement.code)}",
+            "",
+            markdown_cell(requirement.text),
+            "",
+            f"Necessity: {requirement.necessity}; "
+            f"state: {requirement.ambiguity_state}; "
+            f"criteria: {markdown_cell(linked)}.",
+            f"Source: assignment lines {requirement.source.start_line} "
+            f"through {requirement.source.end_line}.",
+            "",
+            *(f"> {escape(line)}" for line in requirement.source_quote.splitlines()),
+            "",
+        ]
+    if analysis.penalty_rules:
+        lines += ["## Explicit assignment penalties", ""]
+        for rule in analysis.penalty_rules:
+            lines += [
+                f"* {markdown_cell(rule.code)}: {rule.amount}. "
+                f"{markdown_cell(rule.description)} "
+                f"Trigger: {markdown_cell(rule.trigger)}"
+            ]
+    return "\n".join(lines).rstrip() + "\n"
 
 
 def render_markdown(bundle: ReviewBundle) -> str:

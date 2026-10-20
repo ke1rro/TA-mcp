@@ -1,0 +1,163 @@
+{
+  "schema_version": "1.0",
+  "requirements": [
+    {
+      "schema_version": "1.0",
+      "id": "0dafb7fb-08c3-5881-b252-6e1fac7d0394",
+      "assignment_id": "2ed963a9-f1d6-5bb7-8c00-beeae25c6a73",
+      "code": "REQ_BUILD",
+      "text": "CMake configuration and build must successfully compile and create the count_even executable without errors.",
+      "kind": "functional",
+      "necessity": "mandatory",
+      "ambiguity_state": "clear",
+      "source": {
+        "schema_version": "1.0",
+        "start_line": 53,
+        "end_line": 55
+      },
+      "source_quote": "| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |",
+      "points": "1"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "ebcd1320-73b0-5ee4-a7b4-2b0f5b4e29cd",
+      "assignment_id": "2ed963a9-f1d6-5bb7-8c00-beeae25c6a73",
+      "code": "REQ_CLI_VALIDATION",
+      "text": "Validate CLI arguments, producing exit code 1 if argument count is not two, and exit code 2 for invalid numbers, numbers outside [-1000, 1000], or left > right, printing a clear message to stderr.",
+      "kind": "functional",
+      "necessity": "mandatory",
+      "ambiguity_state": "clear",
+      "source": {
+        "schema_version": "1.0",
+        "start_line": 53,
+        "end_line": 57
+      },
+      "source_quote": "| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |\n| Correctness | 2 | Correct results, inclusive bounds, zero and negative values |\n| CLI validation | 1 | Correct exit codes and messages for invalid arguments |",
+      "points": "1"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "88922fd4-1578-5b9b-952d-e518a64c60cb",
+      "assignment_id": "2ed963a9-f1d6-5bb7-8c00-beeae25c6a73",
+      "code": "REQ_CORRECTNESS",
+      "text": "The program must correctly count even integers in the inclusive interval [left, right], including zero and negative even numbers.",
+      "kind": "functional",
+      "necessity": "mandatory",
+      "ambiguity_state": "clear",
+      "source": {
+        "schema_version": "1.0",
+        "start_line": 53,
+        "end_line": 56
+      },
+      "source_quote": "| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |\n| Correctness | 2 | Correct results, inclusive bounds, zero and negative values |",
+      "points": "2"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "4dd59e8c-e3a9-5056-a74f-a88debf36eec",
+      "assignment_id": "2ed963a9-f1d6-5bb7-8c00-beeae25c6a73",
+      "code": "REQ_OUTPUT_FORMAT",
+      "text": "On success, output must contain only one integer count followed by \\n to stdout with no other text. On error, stdout must be empty and errors sent to stderr.",
+      "kind": "functional",
+      "necessity": "mandatory",
+      "ambiguity_state": "clear",
+      "source": {
+        "schema_version": "1.0",
+        "start_line": 53,
+        "end_line": 58
+      },
+      "source_quote": "| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |\n| Correctness | 2 | Correct results, inclusive bounds, zero and negative values |\n| CLI validation | 1 | Correct exit codes and messages for invalid arguments |\n| Output format | 1 | Only one integer and a newline in stdout on success; stderr on errors |",
+      "points": "1"
+    }
+  ],
+  "rubric": {
+    "schema_version": "1.0",
+    "id": "8f07a068-80fd-52bd-bd55-3ad1f2412930",
+    "assignment_id": "2ed963a9-f1d6-5bb7-8c00-beeae25c6a73",
+    "version": 1,
+    "scoring_mode": "POINTS",
+    "status": "FROZEN",
+    "maximum_base_points": "5",
+    "bonus_policy": "NONE",
+    "grade_cap": null,
+    "grade_cap_requirement_id": null,
+    "needs_clarification": false
+  },
+  "criteria": [
+    {
+      "schema_version": "1.0",
+      "id": "6cd617fd-621f-5de1-86a7-03fb33af28a2",
+      "rubric_id": "8f07a068-80fd-52bd-bd55-3ad1f2412930",
+      "code": "CRIT_BUILD",
+      "ordinal": 1,
+      "title": "Build",
+      "description": "CMake creates count_even executable without errors.",
+      "category": "requirements",
+      "role": "CORE",
+      "verification_method": "Run `cmake -S . -B build` followed by `cmake --build build` and check for successful creation of the `count_even` executable without build errors.",
+      "max_points": "1"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "14a09470-39b3-5e9e-b74d-6b6c9e6b9345",
+      "rubric_id": "8f07a068-80fd-52bd-bd55-3ad1f2412930",
+      "code": "CRIT_CORRECTNESS",
+      "ordinal": 2,
+      "title": "Correctness",
+      "description": "Correct results, inclusive bounds, zero and negative values.",
+      "category": "correctness",
+      "role": "CORE",
+      "verification_method": "Execute the binary with representative valid inputs including positive, negative, zero, and single-value ranges (e.g. 1 5, -3 3, 0 0) and verify that the count of even numbers in [left, right] is correct.",
+      "max_points": "2"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "4e98cded-502e-5dad-8287-f082ec685530",
+      "rubric_id": "8f07a068-80fd-52bd-bd55-3ad1f2412930",
+      "code": "CRIT_CLI_VALIDATION",
+      "ordinal": 3,
+      "title": "CLI validation",
+      "description": "Correct exit codes and messages for invalid arguments.",
+      "category": "correctness",
+      "role": "CORE",
+      "verification_method": "Invoke the program with invalid argument counts (expecting exit code 1) and with invalid numbers, values outside [-1000, 1000], or left > right (expecting exit code 2), ensuring error messages are printed to stderr.",
+      "max_points": "1"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "4d4dbd25-8080-5978-bdbe-04071478c879",
+      "rubric_id": "8f07a068-80fd-52bd-bd55-3ad1f2412930",
+      "code": "CRIT_OUTPUT_FORMAT",
+      "ordinal": 4,
+      "title": "Output format",
+      "description": "Only one integer and a newline in stdout on success; stderr on errors.",
+      "category": "requirements",
+      "role": "CORE",
+      "verification_method": "Verify that successful runs emit exactly one integer followed by newline to stdout with no extra text, and erroneous runs keep stdout completely empty while writing error messages to stderr.",
+      "max_points": "1"
+    }
+  ],
+  "criterion_requirements": [
+    {
+      "schema_version": "1.0",
+      "criterion_id": "14a09470-39b3-5e9e-b74d-6b6c9e6b9345",
+      "requirement_id": "88922fd4-1578-5b9b-952d-e518a64c60cb"
+    },
+    {
+      "schema_version": "1.0",
+      "criterion_id": "4d4dbd25-8080-5978-bdbe-04071478c879",
+      "requirement_id": "4dd59e8c-e3a9-5056-a74f-a88debf36eec"
+    },
+    {
+      "schema_version": "1.0",
+      "criterion_id": "4e98cded-502e-5dad-8287-f082ec685530",
+      "requirement_id": "ebcd1320-73b0-5ee4-a7b4-2b0f5b4e29cd"
+    },
+    {
+      "schema_version": "1.0",
+      "criterion_id": "6cd617fd-621f-5de1-86a7-03fb33af28a2",
+      "requirement_id": "0dafb7fb-08c3-5881-b252-6e1fac7d0394"
+    }
+  ],
+  "penalty_rules": []
+}

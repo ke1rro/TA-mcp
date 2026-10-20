@@ -1,0 +1,72 @@
+[
+  {
+    "schema_version": "1.0",
+    "id": "42431b71-3e0b-463a-a19c-0bc3f62da1b9",
+    "review_run_id": "44e5cc75-d5a0-4854-9cc0-06e61047056d",
+    "kind": "compile",
+    "status": "PASSED",
+    "tool_name": "cmake.configure",
+    "exit_code": 0,
+    "duration_ms": 1368,
+    "bounded_stdout": "-- The CXX compiler identification is Clang 21.1.8\n-- Detecting CXX compiler ABI info\n-- Detecting CXX compiler ABI info - done\n-- Check for working CXX compiler: /Users/nikitalenyk/.nix-profile/bin/c++ - skipped\n-- Detecting CXX compile features\n-- Detecting CXX compile features - done\n-- Configuring done (1.2s)\n-- Generating done (0.0s)\n-- Build files have been written to: /tmp/ta-mcp-mini-vh3xc9xy/build\n",
+    "bounded_stderr": "",
+    "environment_digest": "5a9df37177e2f38b991d6ddfab232d62c160d753959e3dc4c5f6defe5b34b183",
+    "reason": null
+  },
+  {
+    "schema_version": "1.0",
+    "id": "75421787-ad0a-4277-a899-8e06690cc6a8",
+    "review_run_id": "44e5cc75-d5a0-4854-9cc0-06e61047056d",
+    "kind": "compile",
+    "status": "PASSED",
+    "tool_name": "cmake.build",
+    "exit_code": 0,
+    "duration_ms": 1059,
+    "bounded_stdout": "[ 50%] Building CXX object CMakeFiles/count_even.dir/main.cpp.o\n[100%] Linking CXX executable count_even\n[100%] Built target count_even\n",
+    "bounded_stderr": "",
+    "environment_digest": "5a9df37177e2f38b991d6ddfab232d62c160d753959e3dc4c5f6defe5b34b183",
+    "reason": null
+  },
+  {
+    "schema_version": "1.0",
+    "id": "9f73eabb-11d0-4b45-bb13-a5c1526a5c26",
+    "review_run_id": "44e5cc75-d5a0-4854-9cc0-06e61047056d",
+    "kind": "tests",
+    "status": "PASSED",
+    "tool_name": "ta-mcp.local.correctness",
+    "exit_code": 0,
+    "duration_ms": 697,
+    "bounded_stdout": "Harness exit code is 0 for all cases passing, 1 for a failed case.\nargs=[\"1\", \"5\"] expected_exit=0 actual_exit=0 expected_count=2 stdout=\"2\\n\" stderr=\"\" correctness=True\nargs=[\"-3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=3 stdout=\"3\\n\" stderr=\"\" correctness=True\nargs=[\"0\", \"0\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\nargs=[\"2\", \"2\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\nargs=[\"3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=0 stdout=\"0\\n\" stderr=\"\" correctness=True\nargs=[\"-4\", \"-2\"] expected_exit=0 actual_exit=0 expected_count=2 stdout=\"2\\n\" stderr=\"\" correctness=True\nargs=[\"-1000\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1001 stdout=\"1001\\n\" stderr=\"\" correctness=True\nargs=[\"-1000\", \"-1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\nargs=[\"999\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\nargs=[\"1000\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True",
+    "bounded_stderr": "",
+    "environment_digest": "5a9df37177e2f38b991d6ddfab232d62c160d753959e3dc4c5f6defe5b34b183",
+    "reason": null
+  },
+  {
+    "schema_version": "1.0",
+    "id": "8c627970-d27d-4e83-8e23-ee91e63eb134",
+    "review_run_id": "44e5cc75-d5a0-4854-9cc0-06e61047056d",
+    "kind": "tests",
+    "status": "FAILED",
+    "tool_name": "ta-mcp.local.cli",
+    "exit_code": 1,
+    "duration_ms": 110,
+    "bounded_stdout": "Harness exit code is 0 for all cases passing, 1 for a failed case.\nargs=[] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" cli=True\nargs=[\"1\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" cli=True\nargs=[\"1\", \"2\", \"3\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" cli=True\nargs=[\"abc\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"2\\n\" stderr=\"\" cli=False\nargs=[\"1.5\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"1\\n\" stderr=\"\" cli=False\nargs=[\"2x\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"1\\n\" stderr=\"\" cli=False\nargs=[\"\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"2\\n\" stderr=\"\" cli=False\nargs=[\"-1001\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"502\\n\" stderr=\"\" cli=False\nargs=[\"0\", \"1001\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"501\\n\" stderr=\"\" cli=False\nargs=[\"4\", \"2\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid range\\n\" cli=True\nargs=[\"999999999999999999999999\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"2\\n\" stderr=\"\" cli=False",
+    "bounded_stderr": "",
+    "environment_digest": "5a9df37177e2f38b991d6ddfab232d62c160d753959e3dc4c5f6defe5b34b183",
+    "reason": null
+  },
+  {
+    "schema_version": "1.0",
+    "id": "7632b2f9-33b1-40e4-9cf7-adc431d72ea2",
+    "review_run_id": "44e5cc75-d5a0-4854-9cc0-06e61047056d",
+    "kind": "tests",
+    "status": "FAILED",
+    "tool_name": "ta-mcp.local.output",
+    "exit_code": 1,
+    "duration_ms": 807,
+    "bounded_stdout": "Harness exit code is 0 for all cases passing, 1 for a failed case.\nargs=[\"1\", \"5\"] expected_exit=0 actual_exit=0 expected_count=2 stdout=\"2\\n\" stderr=\"\" output=True\nargs=[\"-3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=3 stdout=\"3\\n\" stderr=\"\" output=True\nargs=[\"0\", \"0\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[\"2\", \"2\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[\"3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=0 stdout=\"0\\n\" stderr=\"\" output=True\nargs=[\"-4\", \"-2\"] expected_exit=0 actual_exit=0 expected_count=2 stdout=\"2\\n\" stderr=\"\" output=True\nargs=[\"-1000\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1001 stdout=\"1001\\n\" stderr=\"\" output=True\nargs=[\"-1000\", \"-1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[\"999\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[\"1000\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" output=True\nargs=[\"1\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" output=True\nargs=[\"1\", \"2\", \"3\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" output=True\nargs=[\"abc\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"2\\n\" stderr=\"\" output=False\nargs=[\"1.5\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"1\\n\" stderr=\"\" output=False\nargs=[\"2x\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"1\\n\" stderr=\"\" output=False\nargs=[\"\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"2\\n\" stderr=\"\" output=False\nargs=[\"-1001\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"502\\n\" stderr=\"\" output=False\nargs=[\"0\", \"1001\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"501\\n\" stderr=\"\" output=False\nargs=[\"4\", \"2\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid range\\n\" output=True\nargs=[\"999999999999999999999999\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"2\\n\" stderr=\"\" output=False",
+    "bounded_stderr": "",
+    "environment_digest": "5a9df37177e2f38b991d6ddfab232d62c160d753959e3dc4c5f6defe5b34b183",
+    "reason": null
+  }
+]
