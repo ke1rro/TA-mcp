@@ -1,36 +1,57 @@
 import ast
 import hashlib
 import platform
+from pathlib import Path
 from time import monotonic_ns
 from uuid import UUID
 
 from ta_mcp.archive import InspectedArchive
-from ta_mcp.domain import CheckExecution, CheckStatus, GradingPolicy
+from ta_mcp.domain import AssignmentDocument, CheckExecution, CheckStatus, GradingPolicy
+from ta_mcp.local_checks import run_mini_checks
 
 
 def run_available_checks(
-    archive: InspectedArchive, review_run_id: UUID, policy: GradingPolicy
+    archive: InspectedArchive,
+    review_run_id: UUID,
+    policy: GradingPolicy,
+    assignment: AssignmentDocument | None = None,
+    artifacts: Path | None = None,
 ) -> list[CheckExecution]:
-    """Parse Python syntax as data and decline all unisolated execution.
+    """Run local Count Even checks or parse Python syntax without execution.
 
     Args:
         archive: Fully validated archive retained only in memory.
         review_run_id: Identity to attach to every tool result.
         policy: Trusted behavior flags for requested checks.
+        assignment: Trusted assignment selecting the supported mini checker.
+        artifacts: Directory for persistent local command logs.
 
     Returns:
-        Bounded syntax diagnostics and explicit unavailable or skipped checks.
+        Actual bounded diagnostics and explicit unavailable or skipped checks.
     """
     environment = hashlib.sha256(
         f"ta-mcp:ast:{platform.python_version()}".encode()
     ).hexdigest()
     results = []
+    is_mini_assignment = (
+        assignment is not None
+        and "count_even <left> <right>" in assignment.original_text
+        and "CMakeLists.txt" in assignment.original_text
+    )
+    if is_mini_assignment and artifacts is not None:
+        results.extend(run_mini_checks(archive, review_run_id, policy, artifacts))
     for kind, is_enabled in (
         ("compile", policy.check_correctness),
         ("tests", policy.run_tests),
         ("static", policy.check_code_quality),
         ("memory", policy.check_memory_safety),
     ):
+        if (
+            is_mini_assignment
+            and artifacts is not None
+            and kind in {"compile", "tests"}
+        ):
+            continue
         if not is_enabled:
             results.append(
                 CheckExecution(

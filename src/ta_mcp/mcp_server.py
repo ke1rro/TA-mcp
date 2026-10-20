@@ -177,9 +177,9 @@ def create_server(scope: ServerScope) -> FastMCP:
 
     if scope.role == "grader":
 
-        @server.tool(name="run_checks", annotations={"readOnlyHint": True})
+        @server.tool(name="run_checks", annotations={"readOnlyHint": False})
         def run_checks_tool(request: RunChecksRequest) -> RunChecksResponse:
-            """Freeze review inputs and run only the available safe checks."""
+            """Freeze inputs and run bounded local mini checks or syntax analysis."""
             try:
                 archive = session.inspect(request.archive_path)
                 digest = session.freeze_inputs(request)
@@ -188,7 +188,11 @@ def create_server(scope: ServerScope) -> FastMCP:
                     return ToolSuccess[CheckResults](value=previous[1])
                 results = CheckResults(
                     checks=run_available_checks(
-                        archive, request.review_run_id, request.policy
+                        archive,
+                        request.review_run_id,
+                        request.policy,
+                        request.assignment,
+                        scope.output.parent / "checks" / str(request.review_run_id),
                     ),
                     frozen_input_digest=digest,
                 )

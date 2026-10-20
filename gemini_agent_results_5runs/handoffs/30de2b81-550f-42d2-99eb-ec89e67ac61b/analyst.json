@@ -1,0 +1,163 @@
+{
+  "schema_version": "1.0",
+  "requirements": [
+    {
+      "schema_version": "1.0",
+      "id": "18cbe1f1-3d2f-410a-8bf8-0eb8971fce01",
+      "assignment_id": "2e0026f9-0bfb-4857-862c-ce68de6080ad",
+      "code": "REQ-BUILD",
+      "text": "The project must compile using CMake to create the count_even executable without errors.",
+      "kind": "functional",
+      "necessity": "mandatory",
+      "ambiguity_state": "clear",
+      "source": {
+        "schema_version": "1.0",
+        "start_line": 53,
+        "end_line": 55
+      },
+      "source_quote": "| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |",
+      "points": "1"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "92695843-0c4e-4f32-84b2-29712df8bc57",
+      "assignment_id": "2e0026f9-0bfb-4857-862c-ce68de6080ad",
+      "code": "REQ-CLI-VALIDATION",
+      "text": "The program must validate CLI arguments, exiting with code 1 for wrong argument count and code 2 for invalid numbers, out-of-range values, or left > right, printing clear error messages to stderr.",
+      "kind": "functional",
+      "necessity": "mandatory",
+      "ambiguity_state": "clear",
+      "source": {
+        "schema_version": "1.0",
+        "start_line": 53,
+        "end_line": 57
+      },
+      "source_quote": "| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |\n| Correctness | 2 | Correct results, inclusive bounds, zero and negative values |\n| CLI validation | 1 | Correct exit codes and messages for invalid arguments |",
+      "points": "1"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "51f0436d-5573-41bb-bcf9-54b9d0dcda4f",
+      "assignment_id": "2e0026f9-0bfb-4857-862c-ce68de6080ad",
+      "code": "REQ-CORRECTNESS",
+      "text": "The program must compute correct results for even integer counts across the inclusive interval [left, right], including zero and negative numbers.",
+      "kind": "functional",
+      "necessity": "mandatory",
+      "ambiguity_state": "clear",
+      "source": {
+        "schema_version": "1.0",
+        "start_line": 53,
+        "end_line": 56
+      },
+      "source_quote": "| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |\n| Correctness | 2 | Correct results, inclusive bounds, zero and negative values |",
+      "points": "2"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "cb1c7df7-ee6a-4959-b1be-551130d22cbb",
+      "assignment_id": "2e0026f9-0bfb-4857-862c-ce68de6080ad",
+      "code": "REQ-OUTPUT-FORMAT",
+      "text": "On success, output must contain only one integer and a newline in stdout. On errors, stdout must be empty and errors directed to stderr.",
+      "kind": "functional",
+      "necessity": "mandatory",
+      "ambiguity_state": "clear",
+      "source": {
+        "schema_version": "1.0",
+        "start_line": 53,
+        "end_line": 58
+      },
+      "source_quote": "| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |\n| Correctness | 2 | Correct results, inclusive bounds, zero and negative values |\n| CLI validation | 1 | Correct exit codes and messages for invalid arguments |\n| Output format | 1 | Only one integer and a newline in stdout on success; stderr on errors |",
+      "points": "1"
+    }
+  ],
+  "rubric": {
+    "schema_version": "1.0",
+    "id": "e305f884-a169-4560-b97c-9b19dfb43d3b",
+    "assignment_id": "2e0026f9-0bfb-4857-862c-ce68de6080ad",
+    "version": 1,
+    "scoring_mode": "POINTS",
+    "status": "FROZEN",
+    "maximum_base_points": "5",
+    "bonus_policy": "NONE",
+    "grade_cap": null,
+    "grade_cap_requirement_id": null,
+    "needs_clarification": false
+  },
+  "criteria": [
+    {
+      "schema_version": "1.0",
+      "id": "bd053db3-5967-4d76-b605-649774640bf5",
+      "rubric_id": "e305f884-a169-4560-b97c-9b19dfb43d3b",
+      "code": "CRIT-BUILD",
+      "ordinal": 1,
+      "title": "Build",
+      "description": "CMake creates count_even without errors.",
+      "category": "requirements",
+      "role": "CORE",
+      "verification_method": "Run cmake configuration and build commands and verify that count_even is generated without errors.",
+      "max_points": "1"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "3be604bb-593d-4bb0-b74a-293d052d9a3b",
+      "rubric_id": "e305f884-a169-4560-b97c-9b19dfb43d3b",
+      "code": "CRIT-CORRECTNESS",
+      "ordinal": 2,
+      "title": "Correctness",
+      "description": "Correct results, inclusive bounds, zero and negative values.",
+      "category": "correctness",
+      "role": "CORE",
+      "verification_method": "Run the executable with various valid intervals (including negative numbers, zero, and single-value intervals) and verify correct counts.",
+      "max_points": "2"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "1d8eb6d3-c90a-42c2-8ae1-7892cb67464d",
+      "rubric_id": "e305f884-a169-4560-b97c-9b19dfb43d3b",
+      "code": "CRIT-CLI-VALIDATION",
+      "ordinal": 3,
+      "title": "CLI validation",
+      "description": "Correct exit codes and messages for invalid arguments.",
+      "category": "correctness",
+      "role": "CORE",
+      "verification_method": "Execute program with incorrect argument counts, out-of-range arguments, non-integers, and left > right, checking exit codes (1 or 2) and non-empty stderr.",
+      "max_points": "1"
+    },
+    {
+      "schema_version": "1.0",
+      "id": "23fa34c4-722a-4a0b-aa7f-682500057488",
+      "rubric_id": "e305f884-a169-4560-b97c-9b19dfb43d3b",
+      "code": "CRIT-OUTPUT-FORMAT",
+      "ordinal": 4,
+      "title": "Output format",
+      "description": "Only one integer and a newline in stdout on success; stderr on errors.",
+      "category": "requirements",
+      "role": "CORE",
+      "verification_method": "Inspect standard output and standard error across successful and error test cases to verify exact formatting.",
+      "max_points": "1"
+    }
+  ],
+  "criterion_requirements": [
+    {
+      "schema_version": "1.0",
+      "criterion_id": "1d8eb6d3-c90a-42c2-8ae1-7892cb67464d",
+      "requirement_id": "92695843-0c4e-4f32-84b2-29712df8bc57"
+    },
+    {
+      "schema_version": "1.0",
+      "criterion_id": "23fa34c4-722a-4a0b-aa7f-682500057488",
+      "requirement_id": "cb1c7df7-ee6a-4959-b1be-551130d22cbb"
+    },
+    {
+      "schema_version": "1.0",
+      "criterion_id": "3be604bb-593d-4bb0-b74a-293d052d9a3b",
+      "requirement_id": "51f0436d-5573-41bb-bcf9-54b9d0dcda4f"
+    },
+    {
+      "schema_version": "1.0",
+      "criterion_id": "bd053db3-5967-4d76-b605-649774640bf5",
+      "requirement_id": "18cbe1f1-3d2f-410a-8bf8-0eb8971fce01"
+    }
+  ],
+  "penalty_rules": []
+}

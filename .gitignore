@@ -224,3 +224,8 @@ AGENTS.md
 CODEX_DATA_MODEL_REQUIREMENTS.md
 CODEX_TWO_CODING_AGENTS_PROMPT.md
 PROJECT.md
+
+
+.DS_Store
+
+!/gemini_agent_test/checks/**/*.log

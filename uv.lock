@@ -1730,6 +1730,7 @@ dependencies = [
     { name = "mcp" },
     { name = "openai-agents" },
     { name = "pydantic" },
+    { name = "python-dotenv" },
     { name = "pyyaml" },
     { name = "sqlalchemy" },
 ]
@@ -1753,6 +1754,7 @@ requires-dist = [
     { name = "mcp", specifier = ">=2.3.0" },
     { name = "openai-agents", specifier = ">=0.24.0" },
     { name = "pydantic", specifier = ">=2.14.1" },
+    { name = "python-dotenv", specifier = ">=1.2,<2" },
     { name = "pyyaml", specifier = ">=6,<7" },
     { name = "sqlalchemy", specifier = ">=2.0,<3" },
 ]

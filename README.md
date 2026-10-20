@@ -1,166 +1,198 @@
-# TA-mcp
+# TA-mcp: manual multi-agent grading demo
 
-TA-mcp reviews a local lab submission against an assignment and a grading policy. Two specialised LLM agents interpret the assignment and assess the submission. A deterministic Python core validates their outputs, computes exact scores, and saves an evidence-backed report for human confirmation.
+TA-mcp reviews one student ZIP against an assignment, produces evidence-backed findings, and saves `review.json` and `review.md`. Grades are recommendations for the instructor.
 
-The system is independent of any particular course, assignment, or student. It provides a CLI, a local MCP server, and a SQLite audit database.
+The demo uses **Count Even Numbers, C++17**:
 
-## Architecture
+- `TA_mcp_mini_assignment.md`: the English assignment and its 5-point rubric.
+- `TA_mcp_five_mini_submissions.zip`: five independent student ZIPs.
 
-![TA-mcp architecture showing assignment, submission, and deterministic domains](docs/diagrams/architecture.png)
+Keep `TA_mcp_evaluation_gold.json` outside agent inputs. Do not pass it as an assignment, policy, submission, or archive member. The application reads the explicitly selected inputs.
 
-[Open the editable draw.io diagram](docs/diagrams/architecture.drawio). It contains both the system architecture and the agent responsibilities view.
+## Two agents and MCP
 
-The review coordinator controls execution order, passes validated data between the agents, records local trace events, and calls tools through an actual stdio MCP client. The CLI starts the scoped MCP subprocesses automatically.
+1. The coordinator connects to MCP as `analyst` and inspects the archive.
+2. **Requirements Analyst** receives the assignment and policy, without student code. It returns source-backed requirements and a rubric.
+3. Python validates citations, references, and point allocations, then saves the analyst handoff.
+4. The coordinator connects as `grader`, confirms the archive, and invokes the available checks.
+5. **Submission Grader** receives the frozen rubric, source previews, and actual check results. It returns assessments and evidence.
+6. Python validates evidence, calculates totals using `Decimal`, and calls MCP `save_review`.
 
-The architecture separates three domains:
+Both agents use the configured Gemini model through the OpenAI Agents SDK and Chat Completions compatibility API. The model returns text containing JSON. The Python coordinator calls MCP tools; model-side tool calling is unnecessary. Pydantic validates structured responses.
 
-| Domain | Responsibility | Boundary |
+| MCP tool | Purpose | Allowed roles |
 | --- | --- | --- |
-| Assignment domain | Interpret assignment text and grading policy; extract cited requirements; define criteria, verification methods, and authorised point rules. | Produces a frozen rubric. Cannot persist reviews. |
-| Submission domain | Assess each frozen criterion using inspected source and actual check results; attach evidence, explain uncertainty, and recommend improvements. | Uses the existing rubric. The grader workflow alone has permission to request a final save. |
-| Deterministic domain | Validate citations and entity relationships, verify tool provenance, calculate Decimal scores, and persist immutable review records and reports. | Recomputes totals and rejects inconsistent model outputs before saving. |
+| `inspect_archive` | Validate a ZIP in memory and return a manifest and bounded text previews. | `analyst`, `grader` |
+| `run_checks` | Freeze the rubric and policy, compile the mini submission, and check numerical results, CLI behavior, and output. | `grader` |
+| `save_review` | Verify evidence against source and tool receipts, then save reports and SQLite audit records. | `grader` |
 
-### Agent responsibilities
+Each role uses a separate scoped stdio MCP process. Permissions are enforced by server registration and the client allowlist. The analyst has no `run_checks` or `save_review` capability. The coordinator writes traces and handoff snapshots. Gemini credentials are excluded from the CMake and student-process environments.
 
-![Responsibilities, inputs, outputs, and permissions of the Requirements Analyst and Submission Grader](docs/diagrams/agent-responsibilities.png)
+## Installation
 
-The **Requirements Analyst** receives the assignment and policy. It extracts atomic requirements with exact source citations, creates the rubric, and identifies ambiguity or conflicting instructions. Point allocations and penalties must come from the supplied assignment. Its MCP scope is read-only.
-
-The **Submission Grader** receives the frozen rubric, policy, inspected source, and actual check results. It produces one assessment per criterion, with evidence, justified point awards when authorised, and feedback. Its workflow can inspect the archive, request safe checks, and save the final validated review through MCP.
-
-The agents exchange a structured rubric with stable identifiers and source references. The shared core checks these references and computes the numeric recommendation; the LLM does not supply a trusted final total.
-
-### Review flow
-
-1. Read the assignment and policy, then inspect the ZIP without extracting or executing it.
-1. Run the Requirements Analyst and validate its source-linked rubric.
-1. Freeze the rubric and policy, inspect the submission again, and collect available check results through MCP.
-1. Run the Submission Grader against the frozen criteria and observed evidence.
-1. Validate the complete review and compute exact scores and uncertainty bounds.
-1. Save the reports and normalized audit records through the grader-only persistence tool.
-
-### MCP tools
-
-| Tool | Purpose | Access |
-| --- | --- | --- |
-| `inspect_archive` | Return archive metadata, the file manifest, detected languages/build systems, and bounded UTF-8 source previews. | Analyst and grader scopes; read-only. |
-| `run_checks` | Freeze review inputs and return actual safe check results or explicit nonexecution reasons. | Grader scope; read-only. |
-| `save_review` | Verify the bundle against trusted observations, then persist SQLite records and deterministic JSON/Markdown reports. | Grader scope; the only persistent-state tool. |
-
-Server registration and client allowlists enforce these permissions. Archive and output locations are fixed by the user-authorized session. Model outputs cannot select arbitrary commands or report destinations.
-
-## Setup
-
-Requirements:
-
-- Python 3.14.
-- `uv` for dependency and environment management.
-- An OpenAI API key for live reviews.
-
-From the repository root, install the locked dependencies:
+Use Python 3.14 and `uv`:
 
 ```bash
-uv sync --locked --no-editable
+cd /Users/nikitalenyk/Desktop/TA-mcp
+uv sync --locked --no-editable --reinstall-package ta-mcp
 ```
 
-Set the API key in the shell used to run the CLI:
+The reinstall option refreshes the installed project after source changes. `--no-editable` avoids the hidden `.pth` issue observed in this macOS workspace. SQLite needs no separate database server.
+
+The local C++ checks require `cmake`, a C++17 compiler, and a build tool in `PATH`. For the mini assignment, checks run on your computer with your user permissions in a temporary directory. Configuration is limited to 30 seconds, compilation to 45 seconds with two build jobs, and each student execution to 2 seconds. CPU time, output file size, open descriptors, and core dumps are bounded. There are 10 valid-input cases and 11 invalid-input cases. No Docker installation is required for this local demo.
+
+## Environment
+
+Create `.env` only if it does not exist:
 
 ```bash
-export OPENAI_API_KEY="your-api-key"
+test -f .env || cp .env.example .env
 ```
 
-The examples use `--no-editable` to avoid a macOS hidden `.pth` file issue observed in this workspace. The SQLite schema is migrated automatically on the first save; no separate database server is required.
+Edit it locally:
 
-## Run a review
+```dotenv
+GEMINI_API_KEY=your_key_here
+TA_MCP_PROVIDER=gemini
+TA_MCP_MODEL=gemini-3.8-flash
+TA_MCP_MAX_LLM_REQUESTS=2
+TA_MCP_LLM_TIMEOUT_SECONDS=180
+```
 
-Provide a local ZIP, a UTF-8 Markdown or plain-text assignment, and a JSON or YAML policy:
+Use an API model identifier available to your project. An AI Studio display name is insufficient. The application strips an optional `models/` prefix and makes no model-discovery request. It does not automatically substitute another model. Do not expose `.env` or API keys in recordings, logs, or chat.
+
+The application loads `.env` from the current directory. Exported environment variables take precedence over `.env`; CLI options take precedence over the corresponding environment values. `--llm-timeout` controls the HTTP timeout, with five additional seconds for the coordinator's agent deadline.
+
+## Extract the submissions
+
+```bash
+mkdir -p gemini_agent_test/inputs
+unzip -n TA_mcp_five_mini_submissions.zip 'submissions/*.zip' \
+  -d gemini_agent_test/inputs
+```
+
+This only extracts the five nested ZIP files. Pass one nested ZIP to TA-mcp, rather than the outer package. Use the English assignment from the repository root; the package's original assignment copy is not loaded.
+
+## Review one submission manually
+
+This command sends live Gemini requests:
 
 ```bash
 uv run --no-editable ta-mcp \
-  --submission student.zip \
-  --requirements assignment.md \
+  --provider gemini \
+  --submission gemini_agent_test/inputs/submissions/submission_01.zip \
+  --requirements TA_mcp_mini_assignment.md \
   --policy examples/policy.yaml \
-  --output reviews \
-  --database reviews.sqlite
+  --output gemini_agent_test/reviews \
+  --database gemini_agent_test/audit.sqlite \
+  --verbose \
+  --llm-timeout 180 \
+  --trace-file "gemini_agent_test/traces/submission_01_$(date +%Y%m%d_%H%M%S).jsonl" \
+  --max-llm-requests 2
 ```
 
-The [example assignment](examples/assignment.md) and [example policy](examples/policy.yaml) show the accepted inputs. Replace the submission and assignment paths with your own files.
+A successful run normally uses two LLM requests: one per agent. Automatic HTTP, SDK, MCP, and rate-limit retries are disabled. JSON repair is disabled by default. The request cap is shared by both agents within one process. A cap of 1 can stop the workflow after analysis without creating a review. Trace files are created exclusively; timestamped names allow repeated manual runs without overwriting a trace.
 
-Use `--model` or `TA_MCP_MODEL` to select the OpenAI model. The default is `gpt-4.1-mini`:
+For a Gemini response rejected by Pydantic, such as an unexpected `$defs` field, add `--repair-output --max-llm-requests 3`. This permits one additional model call across the entire workflow, using the same role agent, original input, rejected JSON, and validation errors. A valid initial response needs no repair call. The repaired output must pass the same strict contract; unknown fields are never silently discarded. Source citations, scoring rules, and evidence still undergo the existing workflow validation. Semantic validation failures after parsing, HTTP errors, and timeouts do not trigger repair.
+
+The repair consumes the shared HTTP budget and reported tokens. Logs include `output_validation_failed`, `output_repair_start`, and, only after successful validation, `output_repair_complete`. They do not include rejected JSON or repair prompts. `--llm-timeout` remains the per-request timeout; with repair enabled, each role's outer deadline allows two request windows plus cleanup time. No additional repair is attempted if either role already used it.
+
+For a repeatable manual JSON repair demonstration, additionally use `--demo-json-error`. It requires `--repair-output --max-llm-requests 3`. After the first contract-valid Gemini response, the coordinator deliberately adds the forbidden root field `demo_extra_field`. Pydantic rejects it, and the existing repair path makes a real additional Gemini request. Logs explicitly record `demo_fault_injected`, `injected_by: coordinator`, and `original_contract_valid: true`. This is deliberate fault injection, not an observed model mistake or an MCP tool error. If the original response is already invalid, its natural validation failure uses the single repair instead; no additional fault is injected. API availability and a successful repaired response cannot be guaranteed. Keep such runs separate from measurements of natural model error rates. Without the flag, no fault is injected.
+
+## Review all five manually
+
+This sequential loop starts up to five processes and allows at most ten LLM request attempts. Each process has a cap of two. It stops at the first failure:
 
 ```bash
-uv run --no-editable ta-mcp \
-  --submission student.zip \
-  --requirements assignment.md \
-  --policy examples/policy.yaml \
-  --model gpt-4.1-mini
+for submission_id in 01 02 03 04 05; do
+  uv run --no-editable ta-mcp \
+    --provider gemini \
+    --submission "gemini_agent_test/inputs/submissions/submission_${submission_id}.zip" \
+    --requirements TA_mcp_mini_assignment.md \
+    --policy examples/policy.yaml \
+    --output gemini_agent_test/reviews \
+    --database gemini_agent_test/audit.sqlite \
+    --verbose \
+    --llm-timeout 180 \
+    --trace-file "gemini_agent_test/traces/submission_${submission_id}_$(date +%Y%m%d_%H%M%S).jsonl" \
+    --max-llm-requests 2 || break
+done
 ```
 
-Alternative entrypoints accept the same arguments:
+Review your provider quota before starting the loop. To continue a stopped batch, list only the submission numbers still needed. Requests from other programs and previous attempts also affect the real provider quota.
 
-```bash
-uv run --no-editable python main.py --help
-uv run --no-editable python -m ta_mcp --help
-```
+## Live observability
 
-Each LLM step has a 120-second timeout. MCP calls have a 30-second timeout. Invalid inputs produce a readable CLI error and a nonzero exit status.
+`--verbose` streams events to stderr and flushes each event. `--trace-file` writes the same events as JSONL and flushes every record. Either option can be used independently.
 
-### Grading policy
+| Category | Visible information |
+| --- | --- |
+| `AGENT` | Agent start and completion, role names, criterion and assessment counts. |
+| `LLM` | Request start and completion, model, HTTP status, duration, request counters, input size, and reported token usage. |
+| `MCP` | Tool name, sanitized arguments, status, duration, and concise results. |
+| `SYSTEM` | Provider settings, connections, handoffs, validation, saved artifact paths, and the final summary. |
+| `ERROR` | Request caps, API errors, validation failures, tool errors, and interruption. |
 
-An empty policy `{}` uses the defaults. The policy controls analysis strictness, code style, feedback detail, and which checks are requested. Decimal settings such as `max_score` must be integers or quoted decimal strings.
+Events contain UTC timestamps, session and run IDs, agent names, and elapsed time. During a non-streaming model request, `request_start` may remain the last event until the provider responds. The application does not display hidden reasoning. It does not log authorization headers, API bodies, complete prompts, or student source code.
 
-Strictness changes analysis depth. It does not change source-defined weights or penalties. A policy maximum alone does not authorise inventing a numeric allocation. When the assignment has no coherent point allocation, the review remains `UNSCORED`.
+`run_summary` reports HTTP attempts, LLM attempts, duration, and available token usage. Failed requests may have unknown usage, shown as `null`. These counters do not show remaining Google quota. Use Ctrl+C to interrupt a run; an already-sent request may still count toward provider usage.
 
-## Reports and scoring
-
-A successful save creates a directory under the selected output path:
+## Outputs and the analyst handoff
 
 ```text
-reviews/<run-id>/
-  review.json
-  review.md
-  COMPLETED
+gemini_agent_test/
+  audit.sqlite
+  traces/submission_<number>_<timestamp>.jsonl
+  handoffs/<run_id>/analyst.json
+  handoffs/<run_id>/analyst.md
+  checks/<run_id>/checks.json
+  checks/<run_id>/*.log
+  reviews/<run_id>/review.json
+  reviews/<run_id>/review.md
+  reviews/<run_id>/COMPLETED
 ```
 
-- `review.json` contains versioned entity collections, ID references, provenance hashes, the policy, rubric, checks, typed evidence, assessments, computed score components, and trace events.
-- `review.md` presents the same validated decisions as a readable report.
-- `COMPLETED` marks successful finalization and contains the canonical JSON digest.
+Immediately after analyst validation, `analyst_handoff_saved` prints the paths to the exact structured `RubricAnalysis` and its readable Markdown view. Open these while the grader is running. They remain available if grading fails later. Saving them adds no LLM requests.
 
-Each criterion is `PASS`, `PARTIAL`, `FAIL`, or `NOT_VERIFIABLE`. Verifiable decisions require evidence. Unavailable checks cannot establish that a submission is incorrect.
+The final CLI output prints report paths and the score. `COMPLETED` confirms persistence, even when the grading state is `NEEDS_REVIEW`. JSON, Markdown, completion markers, and SQLite checksums form an immutable audit record.
 
-Scores use Decimal arithmetic. Core points, bonus points, and explicit penalties remain distinct. Unverified point-bearing criteria produce possible score bounds and a null final recommendation. All grades remain recommendations for human confirmation.
+Both agents are instructed to generate English narrative text. The assignment and Markdown headings are also English. Exact source and diagnostic evidence is preserved in its original language. Historical English presentation copies use `.en.md`; they do not replace the original audited JSON or source quotes and do not represent a new grading run.
 
-The SQLite database stores normalized audit records with foreign keys, uniqueness checks, immutable rubric/policy snapshots, and migration management. Repeating the same save is idempotent; conflicting content for an existing review identity is rejected. Finalization is recoverable across the database and filesystem. Only a matching completion marker and finalized records indicate a successful save.
+If final validation fails, `review_validation_failed` reports the reason and saves `checks/<run_id>/invalid-review.json`. This is an unvalidated diagnostic draft, not a completed review. It can contain short source excerpts. The coordinator resolves citation positions only when the exact diagnostic has one unique match in an actual executed check. Unknown or ambiguous evidence remains subject to strict validation. Offset corrections are logged as `evidence_offsets_resolved` and use no extra LLM requests.
 
-See [the data model](docs/data-model.md) for the schema, scoring equations, and finalization details.
+The final report's `trace_events` contain coordinator audit events. The JSONL trace also contains HTTP counters and final persistence events. Avoid enabling raw third-party DEBUG logs.
 
-## Security and current limitations
+## Interpret the grade
 
-ZIP inspection runs in memory and enforces size, file-count, and expansion limits. It rejects traversal paths, links, special files, duplicate members, encryption, and corrupt archives. The original submission stays unchanged. Student content is treated as untrusted data.
+The rubric assigns build 1 point, correctness 2 points, CLI validation 1 point, and output format 1 point. General style preferences do not introduce additional penalties.
 
-The included Python syntax check uses `ast.parse` on bounded source data. It does not import or execute student code. Compilation, student tests, and memory checks return `UNAVAILABLE` because the MVP has no isolated execution backend. A syntax pass does not prove runtime correctness, and missing tests do not automatically fail a criterion.
+- `PASS`: evidence establishes compliance.
+- `PARTIAL`: evidence supports a partial award with an explanation.
+- `FAIL`: a verified defect is supported by source or execution evidence.
+- `NOT_VERIFIABLE`: the available evidence is insufficient.
 
-Live reviews send the assignment and bounded student source previews to the configured OpenAI model. MCP subprocesses do not receive API keys. OpenAI SDK telemetry tracing is disabled; bounded local audit metadata is saved with the review.
+`UNAVAILABLE` describes a tool check; `NOT_VERIFIABLE` describes a criterion assessment. An unavailable compilation check does not prove a build failure. Unresolved criteria can leave the final score null with lower and upper bounds. `UNSCORED` means no valid numeric allocation was established. Recommendations alone are not proven defects.
 
-The MVP excludes a web UI, LMS integrations, student/course accounts, cloud infrastructure, and a single-agent baseline comparison.
+The mini checker has no dedicated C++ static analyzer or memory checker. Python AST analysis is unavailable for a C++-only archive, and memory checks are disabled by the example policy. These are not additional mini-assignment grading criteria. Keep any comparison with the separate gold file outside agent context.
 
-## Development and verification
+## Single-agent baseline
 
-Run relevant checks from the repository root:
+The single-agent baseline is not implemented. The data-model enum value `SINGLE_AGENT_BASELINE` does not provide a runtime workflow. The CLI has no `--single-agent`, `--baseline`, or `--strategy` option. Current commands use the two existing agents.
 
-```bash
-uv run --no-editable isort --check-only .
-uv run --no-editable black --check .
-uv run --no-editable flake8 src/ scripts/ tests/ app/
-uv run --no-editable ty check
-uv run --no-editable pytest
-uv run --no-editable pre-commit run --all-files
-```
+## Troubleshooting
 
-Regenerate the versioned JSON Schemas with:
+| Symptom | Action |
+| --- | --- |
+| Missing input | Check the working directory, filenames, and ZIP extraction. |
+| Missing key, HTTP 401 or 403 | Check `.env`, exported variables, and project permissions locally. Never print the key. |
+| HTTP 404 or model rejection | Check the API model ID and project access. No automatic model substitution occurs. |
+| HTTP 429 | Check provider rate limits and quota before a new manual attempt. There is no automatic retry. |
+| HTTP 503 | The provider returned a server error. Retry manually later. The status alone does not prove a key or quota problem. |
+| `APITimeoutError` or `TimeoutError` | The wait limit expired. Retry later or adjust `--llm-timeout`; no automatic retry occurs. |
+| `RequestLimitReached` | The local shared request cap was exhausted. Inspect `run_summary`. |
+| `ValidationError` | Inspect the field, validation stage, and any saved invalid draft. Invalid citations, enum values, IDs, JSON, or scores block completion. |
+| MCP error | Inspect the role, tool name, error code, authorized paths, and directory permissions. |
+| Existing trace file | Select a new trace filename. This failure occurs before any API request. |
+| `ModuleNotFoundError: ta_mcp` or unknown new CLI option | Repeat installation with `--no-editable --reinstall-package ta-mcp`. |
 
-```bash
-uv run --no-editable python scripts/export_schemas.py
-```
-
-The tests replace only the external LLM boundary with deterministic responses. Archive inspection, MCP subprocess transport, validation, scoring, migrations, SQLite persistence, and report saving are real. Five grading scenarios cover valid source, syntax failure, a missing required file, unavailable runtime verification, and qualitative scoring. These tests do not require an API key; testing live LLM behaviour does.
+Run full grading commands manually. Setup, formatting, and offline report inspection do not require Gemini requests.

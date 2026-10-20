@@ -1,0 +1,594 @@
+{
+  "assessments": [
+    {
+      "awarded_points": "1",
+      "criterion_id": "40203d98-12c8-47c3-8f08-32a037b38d38",
+      "evidence_ids": [
+        "e2c39d89-9e8c-4a11-89d1-81d58548c771"
+      ],
+      "explanation": "The project configured and built cleanly using CMake without errors, producing the count_even executable.",
+      "id": "8aa1846b-e3c9-44be-b4db-5309489574ef",
+      "not_verifiable_reason": null,
+      "recommendations": "",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "status": "PASS"
+    },
+    {
+      "awarded_points": "1",
+      "criterion_id": "58652615-5654-4a46-8e50-2c35848cb806",
+      "evidence_ids": [
+        "270dbdf3-c6b7-4a00-bcae-21ef1eb8498c"
+      ],
+      "explanation": "CLI argument validation accurately handles argument count errors with exit code 1 and range/format errors with exit code 2, outputting informative messages to stderr.",
+      "id": "5f952a14-416b-4e11-bf32-bc5d45d35a58",
+      "not_verifiable_reason": null,
+      "recommendations": "",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "status": "PASS"
+    },
+    {
+      "awarded_points": "1",
+      "criterion_id": "8ce2bbf1-fc2d-4529-87a3-76472d24490f",
+      "evidence_ids": [
+        "d04071ba-8bc6-46c5-bf6e-ec954d0aa9ae"
+      ],
+      "explanation": "Standard output contains only a single integer followed by newline on success, and stdout remains completely empty with diagnostic messages directed to stderr on error.",
+      "id": "9bc303b7-789a-41f2-89ee-84ec66c75775",
+      "not_verifiable_reason": null,
+      "recommendations": "",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "status": "PASS"
+    },
+    {
+      "awarded_points": "2",
+      "criterion_id": "e4eeb000-8b01-4be3-85f2-959db124ba16",
+      "evidence_ids": [
+        "4dcf5df9-d3fb-464a-9d62-a5ec1277a835"
+      ],
+      "explanation": "The program correctly computes even counts across inclusive ranges including zero, negative numbers, single-value intervals, and full boundary bounds [-1000, 1000].",
+      "id": "3e9bbf04-b9fa-45b7-84be-7dc308b2eb6e",
+      "not_verifiable_reason": null,
+      "recommendations": "",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "status": "PASS"
+    }
+  ],
+  "assignment": {
+    "created_at": "2026-10-20T04:38:16.763521Z",
+    "format": "markdown",
+    "id": "fd0f01bd-b8c3-4e69-af0b-0b3828b04152",
+    "original_text": "# Mini Laboratory Assignment 1: Count Even Numbers (C++17)\n\n## Goal\n\nImplement a small C++17 command-line program that counts **even integers** in the **inclusive interval [left, right]**. This is an independent demonstration assignment for AI Lab Grader, **not part of the numerical integration assignment**.\n\n## 1. Program requirements\n\n- Executable name: `count_even` (`count_even.exe` is acceptable on Windows).\n- Interface: `count_even <left> <right>` with **exactly two** command-line arguments.\n- Both arguments must be decimal integers from `-1000` to `1000`, inclusive.\n- The condition `left <= right` must hold.\n- An even number is an integer `n` for which `n % 2 == 0`. **Zero and negative even numbers must also be counted.**\n- On success, print **only one integer count** to `stdout`, followed by `\\n`. No other text is allowed in `stdout`.\n\n### Examples\n\n```text\n$ ./count_even 1 5\n2\n$ ./count_even -3 3\n3\n$ ./count_even 0 0\n1\n```\n\n## 2. Errors and exit codes\n\n| Situation | Exit code | Output |\n|---|---:|---|\n| Success | `0` | Only the result in `stdout` |\n| The number of arguments is not two | `1` | A clear message in `stderr` |\n| Invalid number, a value outside `[-1000, 1000]`, or `left > right` | `2` | A clear message in `stderr` |\n\nOn error, `stdout` must be empty. Interactive input is prohibited.\n\n## 3. Compilation and submission\n\n- Language: C++17, or a newer version with C++17-compatible code.\n- Include `main.cpp` and `CMakeLists.txt`, which must create the `count_even` executable.\n- The project must compile using the standard commands:\n\n```bash\ncmake -S . -B build\ncmake --build build\n./build/count_even -3 3\n```\n\n- No third-party libraries are required.\n\n## 4. Grading criteria (5 points)\n\n| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |\n| Correctness | 2 | Correct results, inclusive bounds, zero and negative values |\n| CLI validation | 1 | Correct exit codes and messages for invalid arguments |\n| Output format | 1 | Only one integer and a newline in stdout on success; stderr on errors |\n\n**Important for the AI reviewer:** if the program does not compile, do not claim that runtime tests passed. State exactly what was verified and what was unavailable. Every finding must reference source code or a reproducible execution. Do not invent points for additional criteria.\n\n## 5. Minimal review procedure\n\n1. Read the code; do not trust comments or README claims instead of verification.\n2. Compile using CMake.\n3. If the build succeeds, check positive and negative bounds, inclusion of the right endpoint, `0`, incorrect argument counts and invalid numbers.\n4. Record concrete check results and the final grade under the rubric.\n\nFor this demonstration, **one** build and a short set of executions are sufficient. Sanitizers, Valgrind, PVS-Studio, benchmarks and large testing frameworks are unnecessary. Execute student ZIP contents only in a controlled, isolated environment.\n",
+    "provenance": "TA_mcp_mini_assignment.md",
+    "schema_version": "1.0",
+    "sha256": "65ee46d89b8a97d303d6ade8c630f38e8e754df9fc41f64a9e5ce35f5e0844f2"
+  },
+  "checks": [
+    {
+      "bounded_stderr": "",
+      "bounded_stdout": "Harness exit code is 0 for all cases passing, 1 for a failed case.\nargs=[] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" cli=True\nargs=[\"1\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" cli=True\nargs=[\"1\", \"2\", \"3\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" cli=True\nargs=[\"abc\", \"3\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" cli=True\nargs=[\"1.5\", \"3\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" cli=True\nargs=[\"2x\", \"3\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" cli=True\nargs=[\"\", \"3\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" cli=True\nargs=[\"-1001\", \"3\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" cli=True\nargs=[\"0\", \"1001\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" cli=True\nargs=[\"4\", \"2\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" cli=True\nargs=[\"999999999999999999999999\", \"3\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" cli=True",
+      "duration_ms": 118,
+      "environment_digest": "5a9df37177e2f38b991d6ddfab232d62c160d753959e3dc4c5f6defe5b34b183",
+      "exit_code": 0,
+      "id": "035a7cf8-e3c7-436a-b024-9bb5785ba5ba",
+      "kind": "tests",
+      "reason": null,
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "status": "PASSED",
+      "tool_name": "ta-mcp.local.cli"
+    },
+    {
+      "bounded_stderr": "",
+      "bounded_stdout": "Harness exit code is 0 for all cases passing, 1 for a failed case.\nargs=[\"1\", \"5\"] expected_exit=0 actual_exit=0 expected_count=2 stdout=\"2\\n\" stderr=\"\" output=True\nargs=[\"-3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=3 stdout=\"3\\n\" stderr=\"\" output=True\nargs=[\"0\", \"0\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[\"2\", \"2\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[\"3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=0 stdout=\"0\\n\" stderr=\"\" output=True\nargs=[\"-4\", \"-2\"] expected_exit=0 actual_exit=0 expected_count=2 stdout=\"2\\n\" stderr=\"\" output=True\nargs=[\"-1000\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1001 stdout=\"1001\\n\" stderr=\"\" output=True\nargs=[\"-1000\", \"-1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[\"999\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[\"1000\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" output=True\nargs=[\"1\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" output=True\nargs=[\"1\", \"2\", \"3\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" output=True\nargs=[\"abc\", \"3\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" output=True\nargs=[\"1.5\", \"3\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" output=True\nargs=[\"2x\", \"3\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" output=True\nargs=[\"\", \"3\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" output=True\nargs=[\"-1001\", \"3\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" output=True\nargs=[\"0\", \"1001\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" output=True\nargs=[\"4\", \"2\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" output=True\nargs=[\"999999999999999999999999\", \"3\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid integer range\\n\" output=True",
+      "duration_ms": 788,
+      "environment_digest": "5a9df37177e2f38b991d6ddfab232d62c160d753959e3dc4c5f6defe5b34b183",
+      "exit_code": 0,
+      "id": "1116bd54-d859-45e7-ab6f-d6eb14521a13",
+      "kind": "tests",
+      "reason": null,
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "status": "PASSED",
+      "tool_name": "ta-mcp.local.output"
+    },
+    {
+      "bounded_stderr": "",
+      "bounded_stdout": "",
+      "duration_ms": 0,
+      "environment_digest": "04af1be9194046c6455558a58bb50c8992c6b83cdb350a3cfaef69b1f466b1f5",
+      "exit_code": null,
+      "id": "30f55440-c715-43d3-a682-01a3c46d59cb",
+      "kind": "static",
+      "reason": "No UTF-8 Python source is available for syntax analysis",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "status": "UNAVAILABLE",
+      "tool_name": "ta-mcp.python-ast"
+    },
+    {
+      "bounded_stderr": "",
+      "bounded_stdout": "[ 50%] Building CXX object CMakeFiles/count_even.dir/main.cpp.o\n[100%] Linking CXX executable count_even\n[100%] Built target count_even\n",
+      "duration_ms": 1169,
+      "environment_digest": "5a9df37177e2f38b991d6ddfab232d62c160d753959e3dc4c5f6defe5b34b183",
+      "exit_code": 0,
+      "id": "3615fc62-6da3-4710-bd00-72980677741f",
+      "kind": "compile",
+      "reason": null,
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "status": "PASSED",
+      "tool_name": "cmake.build"
+    },
+    {
+      "bounded_stderr": "",
+      "bounded_stdout": "Harness exit code is 0 for all cases passing, 1 for a failed case.\nargs=[\"1\", \"5\"] expected_exit=0 actual_exit=0 expected_count=2 stdout=\"2\\n\" stderr=\"\" correctness=True\nargs=[\"-3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=3 stdout=\"3\\n\" stderr=\"\" correctness=True\nargs=[\"0\", \"0\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\nargs=[\"2\", \"2\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\nargs=[\"3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=0 stdout=\"0\\n\" stderr=\"\" correctness=True\nargs=[\"-4\", \"-2\"] expected_exit=0 actual_exit=0 expected_count=2 stdout=\"2\\n\" stderr=\"\" correctness=True\nargs=[\"-1000\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1001 stdout=\"1001\\n\" stderr=\"\" correctness=True\nargs=[\"-1000\", \"-1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\nargs=[\"999\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\nargs=[\"1000\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True",
+      "duration_ms": 670,
+      "environment_digest": "5a9df37177e2f38b991d6ddfab232d62c160d753959e3dc4c5f6defe5b34b183",
+      "exit_code": 0,
+      "id": "3a0cd47a-56f4-4378-9ccc-78a0b0815201",
+      "kind": "tests",
+      "reason": null,
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "status": "PASSED",
+      "tool_name": "ta-mcp.local.correctness"
+    },
+    {
+      "bounded_stderr": "",
+      "bounded_stdout": "-- The CXX compiler identification is Clang 21.1.8\n-- Detecting CXX compiler ABI info\n-- Detecting CXX compiler ABI info - done\n-- Check for working CXX compiler: /Users/nikitalenyk/.nix-profile/bin/c++ - skipped\n-- Detecting CXX compile features\n-- Detecting CXX compile features - done\n-- Configuring done (1.2s)\n-- Generating done (0.0s)\n-- Build files have been written to: /tmp/ta-mcp-mini-0zcofxpr/build\n",
+      "duration_ms": 1374,
+      "environment_digest": "5a9df37177e2f38b991d6ddfab232d62c160d753959e3dc4c5f6defe5b34b183",
+      "exit_code": 0,
+      "id": "41b325a0-159a-4c0e-89a5-47295752342b",
+      "kind": "compile",
+      "reason": null,
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "status": "PASSED",
+      "tool_name": "cmake.configure"
+    },
+    {
+      "bounded_stderr": "",
+      "bounded_stdout": "",
+      "duration_ms": 0,
+      "environment_digest": "04af1be9194046c6455558a58bb50c8992c6b83cdb350a3cfaef69b1f466b1f5",
+      "exit_code": null,
+      "id": "4261f94c-436d-4f5f-b6e5-e94976deb20d",
+      "kind": "memory",
+      "reason": "Disabled by grading policy",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "status": "SKIPPED",
+      "tool_name": "ta-mcp.policy"
+    }
+  ],
+  "criteria": [
+    {
+      "category": "requirements",
+      "code": "CRIT_BUILD",
+      "description": "CMake creates count_even executable without errors.",
+      "id": "40203d98-12c8-47c3-8f08-32a037b38d38",
+      "max_points": "1",
+      "ordinal": 1,
+      "role": "CORE",
+      "rubric_id": "d049618b-8ee2-421b-851f-50ce41dfc472",
+      "schema_version": "1.0",
+      "title": "Build",
+      "verification_method": "Run `cmake -S . -B build` followed by `cmake --build build` and check for successful creation of the `count_even` executable without build errors."
+    },
+    {
+      "category": "correctness",
+      "code": "CRIT_CORRECTNESS",
+      "description": "Correct results, inclusive bounds, zero and negative values.",
+      "id": "e4eeb000-8b01-4be3-85f2-959db124ba16",
+      "max_points": "2",
+      "ordinal": 2,
+      "role": "CORE",
+      "rubric_id": "d049618b-8ee2-421b-851f-50ce41dfc472",
+      "schema_version": "1.0",
+      "title": "Correctness",
+      "verification_method": "Execute the binary with representative valid inputs including positive, negative, zero, and single-value ranges (e.g. 1 5, -3 3, 0 0) and verify that the count of even numbers in [left, right] is correct."
+    },
+    {
+      "category": "correctness",
+      "code": "CRIT_CLI_VALIDATION",
+      "description": "Correct exit codes and messages for invalid arguments.",
+      "id": "58652615-5654-4a46-8e50-2c35848cb806",
+      "max_points": "1",
+      "ordinal": 3,
+      "role": "CORE",
+      "rubric_id": "d049618b-8ee2-421b-851f-50ce41dfc472",
+      "schema_version": "1.0",
+      "title": "CLI validation",
+      "verification_method": "Invoke the program with invalid argument counts (expecting exit code 1) and with invalid numbers, values outside [-1000, 1000], or left > right (expecting exit code 2), ensuring error messages are printed to stderr."
+    },
+    {
+      "category": "requirements",
+      "code": "CRIT_OUTPUT_FORMAT",
+      "description": "Only one integer and a newline in stdout on success; stderr on errors.",
+      "id": "8ce2bbf1-fc2d-4529-87a3-76472d24490f",
+      "max_points": "1",
+      "ordinal": 4,
+      "role": "CORE",
+      "rubric_id": "d049618b-8ee2-421b-851f-50ce41dfc472",
+      "schema_version": "1.0",
+      "title": "Output format",
+      "verification_method": "Verify that successful runs emit exactly one integer followed by newline to stdout with no extra text, and erroneous runs keep stdout completely empty while writing error messages to stderr."
+    }
+  ],
+  "criterion_requirements": [
+    {
+      "criterion_id": "40203d98-12c8-47c3-8f08-32a037b38d38",
+      "requirement_id": "e44d3106-9630-4e08-9dfc-cb23577d61b3",
+      "schema_version": "1.0"
+    },
+    {
+      "criterion_id": "58652615-5654-4a46-8e50-2c35848cb806",
+      "requirement_id": "e3ee6491-9c60-4c31-9f93-01859bf53b6f",
+      "schema_version": "1.0"
+    },
+    {
+      "criterion_id": "8ce2bbf1-fc2d-4529-87a3-76472d24490f",
+      "requirement_id": "8aa18e95-7798-444f-8e2b-f36ea08197aa",
+      "schema_version": "1.0"
+    },
+    {
+      "criterion_id": "e4eeb000-8b01-4be3-85f2-959db124ba16",
+      "requirement_id": "cfa5be1d-8ce0-4963-8822-77eb4862b719",
+      "schema_version": "1.0"
+    }
+  ],
+  "evidence": [
+    {
+      "check_execution_id": "035a7cf8-e3c7-436a-b024-9bb5785ba5ba",
+      "diagnostic": "args=[\"1\", \"2\", \"3\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\"",
+      "diagnostic_stream": "stdout",
+      "end_offset": 427,
+      "exit_code": 0,
+      "id": "270dbdf3-c6b7-4a00-bcae-21ef1eb8498c",
+      "kind": "check",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "start_offset": 306,
+      "summary": "Missing CLI argument returns exit code 1 with clear stderr message"
+    },
+    {
+      "check_execution_id": "3a0cd47a-56f4-4378-9ccc-78a0b0815201",
+      "diagnostic": "args=[\"-3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=3 stdout=\"3\\n\" stderr=\"\" correctness=True",
+      "diagnostic_stream": "stdout",
+      "end_offset": 273,
+      "exit_code": 0,
+      "id": "4dcf5df9-d3fb-464a-9d62-a5ec1277a835",
+      "kind": "check",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "start_offset": 170,
+      "summary": "Range [-3, 3] returns expected count of 3 even numbers"
+    },
+    {
+      "check_execution_id": "1116bd54-d859-45e7-ab6f-d6eb14521a13",
+      "diagnostic": "args=[\"1\", \"5\"] expected_exit=0 actual_exit=0 expected_count=2 stdout=\"2\\n\" stderr=\"\" output=True",
+      "diagnostic_stream": "stdout",
+      "end_offset": 164,
+      "exit_code": 0,
+      "id": "d04071ba-8bc6-46c5-bf6e-ec954d0aa9ae",
+      "kind": "check",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "start_offset": 67,
+      "summary": "Output verification confirms stdout contains only integer followed by newline and stderr is empty on success"
+    },
+    {
+      "check_execution_id": "3615fc62-6da3-4710-bd00-72980677741f",
+      "diagnostic": "[100%] Built target count_even",
+      "diagnostic_stream": "stdout",
+      "end_offset": 135,
+      "exit_code": 0,
+      "id": "e2c39d89-9e8c-4a11-89d1-81d58548c771",
+      "kind": "check",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "start_offset": 105,
+      "summary": "CMake build target count_even created successfully"
+    }
+  ],
+  "files": [
+    {
+      "byte_size": 174,
+      "id": "f250e8b7-b68b-53fa-8149-f1b9b1043422",
+      "language": null,
+      "line_count": 5,
+      "relative_path": "CMakeLists.txt",
+      "schema_version": "1.0",
+      "sha256": "b1051054277a8c405b2ac950a407093dddfba2107cc9578214ee42ed850bc562",
+      "submission_id": "0833acc6-a0ed-5ff4-b564-74cc63674564"
+    },
+    {
+      "byte_size": 115,
+      "id": "7a72eff6-fa4a-55c9-a03b-581d8b29bf82",
+      "language": null,
+      "line_count": 4,
+      "relative_path": "README.md",
+      "schema_version": "1.0",
+      "sha256": "6169a2e89e92078ac1f4e430876b44b8c17387971f0b87051c54a53a7cc66113",
+      "submission_id": "0833acc6-a0ed-5ff4-b564-74cc63674564"
+    },
+    {
+      "byte_size": 1031,
+      "id": "bce0b252-9fe8-5229-986f-9e67583c0dc0",
+      "language": "C++",
+      "line_count": 39,
+      "relative_path": "main.cpp",
+      "schema_version": "1.0",
+      "sha256": "4441fd826c61795f97205efc7990f953faafb1e9d7ee3b2cdce42b95b595eb19",
+      "submission_id": "0833acc6-a0ed-5ff4-b564-74cc63674564"
+    }
+  ],
+  "penalty_applications": [],
+  "penalty_rules": [],
+  "policy": {
+    "check_code_quality": true,
+    "check_correctness": true,
+    "check_memory_safety": false,
+    "check_requirements": true,
+    "code_style": "none",
+    "custom_style_rules": null,
+    "feedback_detail": "detailed",
+    "id": "31c0c810-6243-4904-b692-e988a4e60b5a",
+    "max_score": null,
+    "run_tests": true,
+    "schema_version": "1.0",
+    "strictness": "balanced",
+    "version": 1
+  },
+  "requirements": [
+    {
+      "ambiguity_state": "clear",
+      "assignment_id": "fd0f01bd-b8c3-4e69-af0b-0b3828b04152",
+      "code": "REQ_BUILD",
+      "id": "e44d3106-9630-4e08-9dfc-cb23577d61b3",
+      "kind": "functional",
+      "necessity": "mandatory",
+      "points": "1",
+      "schema_version": "1.0",
+      "source": {
+        "end_line": 55,
+        "schema_version": "1.0",
+        "start_line": 53
+      },
+      "source_quote": "| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |",
+      "text": "CMake configuration and build must successfully compile and create the count_even executable without errors."
+    },
+    {
+      "ambiguity_state": "clear",
+      "assignment_id": "fd0f01bd-b8c3-4e69-af0b-0b3828b04152",
+      "code": "REQ_CLI_VALIDATION",
+      "id": "e3ee6491-9c60-4c31-9f93-01859bf53b6f",
+      "kind": "functional",
+      "necessity": "mandatory",
+      "points": "1",
+      "schema_version": "1.0",
+      "source": {
+        "end_line": 57,
+        "schema_version": "1.0",
+        "start_line": 53
+      },
+      "source_quote": "| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |\n| Correctness | 2 | Correct results, inclusive bounds, zero and negative values |\n| CLI validation | 1 | Correct exit codes and messages for invalid arguments |",
+      "text": "Validate CLI arguments, producing exit code 1 if argument count is not two, and exit code 2 for invalid numbers, numbers outside [-1000, 1000], or left > right, printing a clear message to stderr."
+    },
+    {
+      "ambiguity_state": "clear",
+      "assignment_id": "fd0f01bd-b8c3-4e69-af0b-0b3828b04152",
+      "code": "REQ_CORRECTNESS",
+      "id": "cfa5be1d-8ce0-4963-8822-77eb4862b719",
+      "kind": "functional",
+      "necessity": "mandatory",
+      "points": "2",
+      "schema_version": "1.0",
+      "source": {
+        "end_line": 56,
+        "schema_version": "1.0",
+        "start_line": 53
+      },
+      "source_quote": "| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |\n| Correctness | 2 | Correct results, inclusive bounds, zero and negative values |",
+      "text": "The program must correctly count even integers in the inclusive interval [left, right], including zero and negative even numbers."
+    },
+    {
+      "ambiguity_state": "clear",
+      "assignment_id": "fd0f01bd-b8c3-4e69-af0b-0b3828b04152",
+      "code": "REQ_OUTPUT_FORMAT",
+      "id": "8aa18e95-7798-444f-8e2b-f36ea08197aa",
+      "kind": "functional",
+      "necessity": "mandatory",
+      "points": "1",
+      "schema_version": "1.0",
+      "source": {
+        "end_line": 58,
+        "schema_version": "1.0",
+        "start_line": 53
+      },
+      "source_quote": "| Criterion | Points | What is checked |\n|---|---:|---|\n| Build | 1 | CMake creates `count_even` without errors |\n| Correctness | 2 | Correct results, inclusive bounds, zero and negative values |\n| CLI validation | 1 | Correct exit codes and messages for invalid arguments |\n| Output format | 1 | Only one integer and a newline in stdout on success; stderr on errors |",
+      "text": "On success, output must contain only one integer count followed by \\n to stdout with no other text. On error, stdout must be empty and errors sent to stderr."
+    }
+  ],
+  "rubric": {
+    "assignment_id": "fd0f01bd-b8c3-4e69-af0b-0b3828b04152",
+    "bonus_policy": "NONE",
+    "grade_cap": null,
+    "grade_cap_requirement_id": null,
+    "id": "d049618b-8ee2-421b-851f-50ce41dfc472",
+    "maximum_base_points": "5",
+    "needs_clarification": false,
+    "schema_version": "1.0",
+    "scoring_mode": "POINTS",
+    "status": "FROZEN",
+    "version": 1
+  },
+  "run": {
+    "finished_at": "2026-10-20T04:40:10.109801Z",
+    "id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+    "policy_id": "31c0c810-6243-4904-b692-e988a4e60b5a",
+    "rubric_id": "d049618b-8ee2-421b-851f-50ce41dfc472",
+    "schema_version": "1.0",
+    "started_at": "2026-10-20T04:38:16.764081Z",
+    "state": "COMPLETED",
+    "strategy": "MULTI_AGENT",
+    "submission_id": "0833acc6-a0ed-5ff4-b564-74cc63674564"
+  },
+  "schema_version": "1.0",
+  "submission": {
+    "archive_name": "submission_01.zip",
+    "byte_size": 989,
+    "created_at": "2026-10-19T17:26:54Z",
+    "id": "0833acc6-a0ed-5ff4-b564-74cc63674564",
+    "schema_version": "1.0",
+    "sha256": "ee84406538692efc09cc0b9624ccafaa6b620b7400dc2e068c7108254a9876f9"
+  },
+  "summary": {
+    "base_points": "5",
+    "bonus_points": "0",
+    "known_points": "5",
+    "maximum_possible_score": "5",
+    "minimum_possible_score": "5",
+    "penalty_points": "0",
+    "recommended_score": "5",
+    "schema_version": "1.0",
+    "unresolved_criterion_ids": []
+  },
+  "trace_events": [
+    {
+      "agent_role": "analyst",
+      "detail": "Requirements Analyst started",
+      "event_type": "agent_start",
+      "id": "98604477-4ae2-4d1a-906b-5d8446551d3f",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 1,
+      "timestamp": "2026-10-20T04:38:16.764081Z"
+    },
+    {
+      "agent_role": "analyst",
+      "detail": "inspect_archive",
+      "event_type": "mcp_call",
+      "id": "97883750-3c35-4280-b690-dfe5490d9afc",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 2,
+      "timestamp": "2026-10-20T04:38:17.635737Z"
+    },
+    {
+      "agent_role": "analyst",
+      "detail": "Inspected 3 files; SHA-256 ee84406538692efc09cc0b9624ccafaa6b620b7400dc2e068c7108254a9876f9",
+      "event_type": "mcp_result",
+      "id": "a1165f50-f0a2-456f-a048-49339b080917",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 3,
+      "timestamp": "2026-10-20T04:38:17.856662Z"
+    },
+    {
+      "agent_role": "analyst",
+      "detail": "Validated 4 source-linked criteria",
+      "event_type": "agent_result",
+      "id": "2036216d-1e8e-4252-accb-1aadeb48d19b",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 4,
+      "timestamp": "2026-10-20T04:39:07.302528Z"
+    },
+    {
+      "agent_role": "orchestrator",
+      "detail": "Frozen rubric d049618b-8ee2-421b-851f-50ce41dfc472 passed to Submission Grader",
+      "event_type": "handoff",
+      "id": "718441df-a76b-4f82-b69d-c97792fea0fb",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 5,
+      "timestamp": "2026-10-20T04:39:07.302724Z"
+    },
+    {
+      "agent_role": "grader",
+      "detail": "Submission Grader started",
+      "event_type": "agent_start",
+      "id": "7e43d3ca-69c4-4cbb-8ab9-7b750bf09c3a",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 6,
+      "timestamp": "2026-10-20T04:39:08.410414Z"
+    },
+    {
+      "agent_role": "grader",
+      "detail": "inspect_archive",
+      "event_type": "mcp_call",
+      "id": "eed957f7-c7d9-4151-b6a6-84018a73472f",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 7,
+      "timestamp": "2026-10-20T04:39:08.410485Z"
+    },
+    {
+      "agent_role": "grader",
+      "detail": "Confirmed archive SHA-256 ee84406538692efc09cc0b9624ccafaa6b620b7400dc2e068c7108254a9876f9",
+      "event_type": "mcp_result",
+      "id": "93919397-690c-4d92-a039-4e0bc20960c2",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 8,
+      "timestamp": "2026-10-20T04:39:08.623990Z"
+    },
+    {
+      "agent_role": "grader",
+      "detail": "run_checks",
+      "event_type": "mcp_call",
+      "id": "150eacc4-39ca-4fd5-83aa-75e78373633a",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 9,
+      "timestamp": "2026-10-20T04:39:08.624001Z"
+    },
+    {
+      "agent_role": "grader",
+      "detail": "cmake.configure=PASSED; cmake.build=PASSED; ta-mcp.local.correctness=PASSED; ta-mcp.local.cli=PASSED; ta-mcp.local.output=PASSED; ta-mcp.python-ast=UNAVAILABLE; ta-mcp.policy=SKIPPED",
+      "event_type": "mcp_result",
+      "id": "84b0597f-beb4-4a28-94f3-226a1349659a",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 10,
+      "timestamp": "2026-10-20T04:39:12.028292Z"
+    },
+    {
+      "agent_role": "grader",
+      "detail": "Received 4 criterion assessments",
+      "event_type": "agent_result",
+      "id": "42f6dd45-6fb6-4252-b374-a4f023ba2ab1",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 11,
+      "timestamp": "2026-10-20T04:40:10.109385Z"
+    },
+    {
+      "agent_role": "grader",
+      "detail": "Proposed review state is COMPLETED; final validation pending",
+      "event_type": "decision",
+      "id": "aa39205a-111c-40c6-b1ad-8ecc4258cb6d",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 12,
+      "timestamp": "2026-10-20T04:40:10.109863Z"
+    },
+    {
+      "agent_role": "grader",
+      "detail": "save_review",
+      "event_type": "mcp_call",
+      "id": "dd395034-3d69-4b30-9dbd-f3c4ce4a05b6",
+      "review_run_id": "c6ff10ba-d94c-4387-b204-9bb7798b8f61",
+      "schema_version": "1.0",
+      "sequence": 13,
+      "timestamp": "2026-10-20T04:40:10.109937Z"
+    }
+  ]
+}

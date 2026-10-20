@@ -5,6 +5,8 @@ import yaml
 
 from ta_mcp.domain import GradingPolicy
 
+DEFAULT_LLM_TIMEOUT_SECONDS = 180
+
 
 def read_policy(path: Path) -> GradingPolicy:
     """Load a bounded JSON or safe YAML policy with closed fields."""

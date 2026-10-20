@@ -1,0 +1,72 @@
+[
+  {
+    "bounded_stderr": "",
+    "bounded_stdout": "Harness exit code is 0 for all cases passing, 1 for a failed case.\nargs=[] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" cli=True\nargs=[\"1\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" cli=True\nargs=[\"1\", \"2\", \"3\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" cli=True\nargs=[\"abc\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"2\\n\" stderr=\"\" cli=False\nargs=[\"1.5\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"1\\n\" stderr=\"\" cli=False\nargs=[\"2x\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"1\\n\" stderr=\"\" cli=False\nargs=[\"\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"2\\n\" stderr=\"\" cli=False\nargs=[\"-1001\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"502\\n\" stderr=\"\" cli=False\nargs=[\"0\", \"1001\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"501\\n\" stderr=\"\" cli=False\nargs=[\"4\", \"2\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid range\\n\" cli=True\n",
+    "duration_ms": 77,
+    "environment_digest": "bbbffa722569f0cdd7bb63b6c80648a862fbfe100e2ba866c7beab89a4322e1a",
+    "exit_code": 1,
+    "id": "642263b1-292d-5176-b221-c35dc9cc2f0b",
+    "kind": "tests",
+    "reason": null,
+    "review_run_id": "878f9775-b8d1-5381-8f54-2af7ac13866d",
+    "schema_version": "1.0",
+    "status": "FAILED",
+    "tool_name": "ta-mcp.local.cli"
+  },
+  {
+    "bounded_stderr": "",
+    "bounded_stdout": "-- Configuring done\n-- Generating done\n-- Build files have been written to: /demo/build\n",
+    "duration_ms": 1143,
+    "environment_digest": "bbbffa722569f0cdd7bb63b6c80648a862fbfe100e2ba866c7beab89a4322e1a",
+    "exit_code": 0,
+    "id": "724f38f8-4589-570a-8514-b437ccefd767",
+    "kind": "compile",
+    "reason": null,
+    "review_run_id": "878f9775-b8d1-5381-8f54-2af7ac13866d",
+    "schema_version": "1.0",
+    "status": "PASSED",
+    "tool_name": "cmake.configure"
+  },
+  {
+    "bounded_stderr": "",
+    "bounded_stdout": "Harness exit code is 0 for all cases passing, 1 for a failed case.\nargs=[\"1\", \"5\"] expected_exit=0 actual_exit=0 expected_count=2 stdout=\"2\\n\" stderr=\"\" output=True\nargs=[\"-3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=3 stdout=\"3\\n\" stderr=\"\" output=True\nargs=[\"0\", \"0\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[\"2\", \"2\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[\"3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=0 stdout=\"0\\n\" stderr=\"\" output=True\nargs=[\"-6\", \"-2\"] expected_exit=0 actual_exit=0 expected_count=3 stdout=\"3\\n\" stderr=\"\" output=True\nargs=[\"-1000\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1001 stdout=\"1001\\n\" stderr=\"\" output=True\nargs=[\"-1000\", \"-1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[\"999\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[\"1000\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" output=True\nargs=[] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" output=True\nargs=[\"1\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" output=True\nargs=[\"1\", \"2\", \"3\"] expected_exit=1 actual_exit=1 expected_count=None stdout=\"\" stderr=\"Expected exactly two integers\\n\" output=True\nargs=[\"abc\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"2\\n\" stderr=\"\" output=False\nargs=[\"1.5\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"1\\n\" stderr=\"\" output=False\nargs=[\"2x\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"1\\n\" stderr=\"\" output=False\nargs=[\"\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"2\\n\" stderr=\"\" output=False\nargs=[\"-1001\", \"3\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"502\\n\" stderr=\"\" output=False\nargs=[\"0\", \"1001\"] expected_exit=2 actual_exit=0 expected_count=None stdout=\"501\\n\" stderr=\"\" output=False\nargs=[\"4\", \"2\"] expected_exit=2 actual_exit=2 expected_count=None stdout=\"\" stderr=\"Invalid range\\n\" output=True\n",
+    "duration_ms": 148,
+    "environment_digest": "bbbffa722569f0cdd7bb63b6c80648a862fbfe100e2ba866c7beab89a4322e1a",
+    "exit_code": 1,
+    "id": "c024c65e-80bb-5693-b135-afe794fd79f0",
+    "kind": "tests",
+    "reason": null,
+    "review_run_id": "878f9775-b8d1-5381-8f54-2af7ac13866d",
+    "schema_version": "1.0",
+    "status": "FAILED",
+    "tool_name": "ta-mcp.local.output"
+  },
+  {
+    "bounded_stderr": "",
+    "bounded_stdout": "Harness exit code is 0 for all cases passing, 1 for a failed case.\nargs=[\"1\", \"5\"] expected_exit=0 actual_exit=0 expected_count=2 stdout=\"2\\n\" stderr=\"\" correctness=True\nargs=[\"-3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=3 stdout=\"3\\n\" stderr=\"\" correctness=True\nargs=[\"0\", \"0\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\nargs=[\"2\", \"2\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\nargs=[\"3\", \"3\"] expected_exit=0 actual_exit=0 expected_count=0 stdout=\"0\\n\" stderr=\"\" correctness=True\nargs=[\"-6\", \"-2\"] expected_exit=0 actual_exit=0 expected_count=3 stdout=\"3\\n\" stderr=\"\" correctness=True\nargs=[\"-1000\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1001 stdout=\"1001\\n\" stderr=\"\" correctness=True\nargs=[\"-1000\", \"-1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\nargs=[\"999\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\nargs=[\"1000\", \"1000\"] expected_exit=0 actual_exit=0 expected_count=1 stdout=\"1\\n\" stderr=\"\" correctness=True\n",
+    "duration_ms": 71,
+    "environment_digest": "bbbffa722569f0cdd7bb63b6c80648a862fbfe100e2ba866c7beab89a4322e1a",
+    "exit_code": 0,
+    "id": "c11d33ef-b257-55a7-8cd4-b642043c4f0f",
+    "kind": "tests",
+    "reason": null,
+    "review_run_id": "878f9775-b8d1-5381-8f54-2af7ac13866d",
+    "schema_version": "1.0",
+    "status": "PASSED",
+    "tool_name": "ta-mcp.local.correctness"
+  },
+  {
+    "bounded_stderr": "",
+    "bounded_stdout": "[ 50%] Building CXX object CMakeFiles/count_even.dir/main.cpp.o\n[100%] Linking CXX executable count_even\n[100%] Built target count_even\n",
+    "duration_ms": 792,
+    "environment_digest": "bbbffa722569f0cdd7bb63b6c80648a862fbfe100e2ba866c7beab89a4322e1a",
+    "exit_code": 0,
+    "id": "f340953b-2787-583d-acf3-f68832180dff",
+    "kind": "compile",
+    "reason": null,
+    "review_run_id": "878f9775-b8d1-5381-8f54-2af7ac13866d",
+    "schema_version": "1.0",
+    "status": "PASSED",
+    "tool_name": "cmake.build"
+  }
+]
