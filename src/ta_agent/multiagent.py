@@ -1,14 +1,14 @@
 import json
+import os
 
-from agents import Agent, AgentOutputSchema, RunConfig, Runner, set_tracing_disabled
-
-from ta_mcp.domain import (
-    AssignmentDocument,
-    GradingDecisions,
-    GradingPolicy,
-    RubricAnalysis,
+from agents import (
+    Agent,
+    AgentOutputSchema,
+    RunConfig,
+    Runner,
 )
-from ta_mcp.workflow import GradingContext
+from agents.mcp import MCPServer
+from openai import AsyncOpenAI
 
 ANALYST_INSTRUCTIONS = """
 You are the Requirements Analyst for an assignment-agnostic lab grader.
@@ -62,50 +62,47 @@ total score. Provide useful recommendations at the policy's feedback detail leve
 """
 
 
-class OpenAIReviewModel:
-    """Two specialized Agents SDK roles with structured outputs and local audit."""
-
-    def __init__(self, model: str) -> None:
-        set_tracing_disabled(True)
-        self.requirements_analyst = Agent(
-            name="Requirements Analyst",
+class MultiagentTAAgent:
+    def __init__(
+        self,
+        model: str,
+        analyst_mcp: MCPServer,
+        grader_mcp: MCPServer,
+        run_config: RunConfig,
+    ) -> None:
+        self.analyst = Agent(
+            name="Analyst",
             instructions=ANALYST_INSTRUCTIONS,
             model=model,
-            output_type=AgentOutputSchema(RubricAnalysis, strict_json_schema=False),
+            mcp_servers=[analyst_mcp],
         )
-        self.submission_grader = Agent(
-            name="Submission Grader",
+        self.grader = Agent(
+            name="Grader",
             instructions=GRADER_INSTRUCTIONS,
             model=model,
-            output_type=AgentOutputSchema(GradingDecisions, strict_json_schema=False),
-        )
-        self.configuration = RunConfig(
-            tracing_disabled=True, trace_include_sensitive_data=False
+            mcp_servers=[grader_mcp],
         )
 
-    async def analyze(
-        self, assignment: AssignmentDocument, policy: GradingPolicy
-    ) -> RubricAnalysis:
+        self.configuration = run_config
+
+    async def analyze(self, assignment_idx: str) -> str:
         """Run the analyst without granting a persistence capability."""
         result = await Runner.run(
-            self.requirements_analyst,
-            json.dumps(
-                {
-                    "assignment": assignment.model_dump(mode="json"),
-                    "policy": policy.model_dump(mode="json"),
-                }
-            ),
-            max_turns=3,
+            self.analyst,
+            f"Analyze the assignment with assignment_idx={assignment_idx} and return requested analysis.",
+            max_turns=6,
             run_config=self.configuration,
         )
-        return result.final_output_as(RubricAnalysis, raise_if_incorrect_type=True)
 
-    async def grade(self, context: GradingContext) -> GradingDecisions:
+        return result.final_output_as(str, raise_if_incorrect_type=True)
+
+    async def grade(self, context: str, submission_idx: str) -> str:
         """Run the grader on the frozen handoff and actual MCP observations."""
         result = await Runner.run(
-            self.submission_grader,
-            context.model_dump_json(),
-            max_turns=3,
+            self.grader,
+            f"{context}\n\nGrade the submission with submission_idx={submission_idx} and return requested decisions.",
+            max_turns=6,
             run_config=self.configuration,
         )
-        return result.final_output_as(GradingDecisions, raise_if_incorrect_type=True)
+
+        return result.final_output_as(str, raise_if_incorrect_type=True)

@@ -4,22 +4,20 @@ version = "0.1.0"
 description = "Evidence-backed lab reviews through two agents and scoped MCP tools"
 readme = "README.md"
 authors = [
-    { name = "Nikita Lenyk", email = "nikitalenyk2@gmail.com" }
+    { name = "Nikita Lenyk", email = "nikitalenyk2@gmail.com" },
+    { name = "Andrii Kryvyi", email = "kryvyi.pn@ucu.edu.ua" },
 ]
 requires-python = ">=3.14"
 dependencies = [
-    "alembic>=1.16,<2",
-    "fastapi>=0.143.1",
     "fastmcp>=4.1.0",
-    "mcp>=2.3.0",
+    "mcp[cli]>=2.3.0",
     "openai-agents>=0.24.0",
-    "pydantic>=2.14.1",
-    "pyyaml>=6,<7",
-    "sqlalchemy>=2.0,<3",
+    "weave>=0.53.12",
 ]
 
 [project.scripts]
-ta-mcp = "ta_mcp.cli:main"
+ta-agent = "ta_agent.cli:main"
+ta-mcp = "ta_mcp.__main__:main"
 
 [build-system]
 requires = ["uv_build>=0.13.0,<0.14.0"]

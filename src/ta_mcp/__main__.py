@@ -1,3 +1,4 @@
-from ta_mcp.cli import main
+from ta_mcp import main
 
-main()
+if __name__ == "__main__":
+    main()

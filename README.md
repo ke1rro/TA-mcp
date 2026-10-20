@@ -86,14 +86,32 @@ uv run --no-editable ta-mcp \
 
 The [example assignment](examples/assignment.md) and [example policy](examples/policy.yaml) show the accepted inputs. Replace the submission and assignment paths with your own files.
 
-Use `--model` or `TA_MCP_MODEL` to select the OpenAI model. The default is `gpt-4.1-mini`:
+Use `--model` or `TA_MCP_MODEL` to select the model identifier. The default is `gpt-4.1-mini`.
+
+Use `--base-url` or `OPENAI_BASE_URL` to connect to any OpenAI-compatible API (e.g. Ollama, vLLM, OpenRouter, Groq, LM Studio):
 
 ```bash
 uv run --no-editable ta-mcp \
   --submission student.zip \
   --requirements assignment.md \
   --policy examples/policy.yaml \
-  --model gpt-4.1-mini
+  --model meta-llama/llama-3.3-70b-instruct \
+  --base-url http://localhost:11434/v1
+```
+
+### Workflow selection
+
+Select between the two supported workflow architectures using `--workflow`:
+
+- `--workflow two-agents` (default): Two specialized agents with a frozen rubric handoff (Requirements Analyst extracts criteria; Submission Grader evaluates evidence and checks).
+- `--workflow simplified`: A single agent baseline that receives policy, requirements, and all submission code into its context, grades it, and produces the same structured grading report.
+
+```bash
+uv run --no-editable ta-mcp \
+  --submission student.zip \
+  --requirements assignment.md \
+  --policy examples/policy.yaml \
+  --workflow simplified
 ```
 
 Alternative entrypoints accept the same arguments:
