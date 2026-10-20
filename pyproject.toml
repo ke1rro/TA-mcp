@@ -4,7 +4,8 @@ version = "0.1.0"
 description = "Evidence-backed lab reviews through two agents and scoped MCP tools"
 readme = "README.md"
 authors = [
-    { name = "Nikita Lenyk", email = "nikitalenyk2@gmail.com" }
+    { name = "Nikita Lenyk", email = "nikitalenyk2@gmail.com" },
+    { name = "Andrii Kryvyi", email = "kryvyi.pn@ucu.edu.ua" },
 ]
 requires-python = ">=3.14"
 dependencies = [
